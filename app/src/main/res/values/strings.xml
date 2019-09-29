@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="lorem">lorem ipsum dolor sit amet</string>
+    <string name="title_movie">Movie Title</string>
+    <string name="todo">TODO</string>
+    <string name="year">Year</string>
+    <string name="user_score">User Score</string>
+    <string name="overview">Overview</string>
+    <string name="change_language_settings">Change Language Settings</string>
+
+    <string name="image_toolbar">https://offthemikedotcom.files.wordpress.com/2018/01/movie-theater2.jpg</string>
+    <string name="no_data">No Data</string>
+    <string name="category_movie">Movie</string>
+    <string name="category_tv_show">TV Show</string>
+    <string name="category_favorite">Favorite</string>
+
+    <string-array name="data_title_tab">
+        <item>Movies</item>
+        <item>TV Shows</item>
+    </string-array>
+
+    <string-array name="data_title_app">
+        <item>Movie Detail</item>
+        <item>TV Show Detail</item>
+    </string-array>
+</resources>

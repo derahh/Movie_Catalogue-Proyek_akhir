@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="lorem">lorem ipsum dolor sit amet</string>
+    <string name="title_movie">Judul Movie</string>
+    <string name="todo">TODO</string>
+    <string name="year">Tahun</string>
+    <string name="user_score">Skor Pengguna</string>
+    <string name="overview">Ikhtisar</string>
+    <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
+
+    <string name="image_toolbar">https://offthemikedotcom.files.wordpress.com/2018/01/movie-theater2.jpg</string>
+    <string name="no_data">Data Tidak Ada</string>
+    <string name="category_movie">Film</string>
+    <string name="category_tv_show">Acara TV</string>
+    <string name="category_favorite">Favorit</string>
+
+    <string-array name="data_title_tab">
+        <item>Film</item>
+        <item>Acara TV</item>
+    </string-array>
+
+    <string-array name="data_title_app">
+        <item>Detail Film</item>
+        <item>Detail Acara TV</item>
+    </string-array>
+</resources>
