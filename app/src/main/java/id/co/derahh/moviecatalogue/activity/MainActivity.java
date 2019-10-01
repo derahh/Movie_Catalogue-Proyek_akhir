@@ -7,9 +7,11 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
@@ -62,14 +64,6 @@ public class MainActivity extends AppCompatActivity {
             fragment = getSupportFragmentManager().getFragment(savedInstanceState, KEY_FRAGMENT);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_content, fragment).commit();
         }
-//        bottomNavigationView.setOnNavigationItemSelectedListener(this);
-//        Intent intent = getIntent();
-//        int intentFragment = intent.getIntExtra(LOAD_FRAGMENT_MAIN_MENU, value);
-//        if (intentFragment != -1) {
-//            loadFragmentFromIntent(intentFragment);
-//        } else {
-//            loadFragment(new TvShowFragment());
-//        }
     }
 
     @Override
