@@ -13,6 +13,7 @@
     <string name="category_movie">Film</string>
     <string name="category_tv_show">Acara TV</string>
     <string name="category_favorite">Favorit</string>
+    <string name="search">Cari</string>
 
     <string-array name="data_title_tab">
         <item>Film</item>

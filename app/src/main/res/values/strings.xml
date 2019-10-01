@@ -13,6 +13,7 @@
     <string name="category_movie">Movie</string>
     <string name="category_tv_show">TV Show</string>
     <string name="category_favorite">Favorite</string>
+    <string name="search">Search</string>
 
     <string-array name="data_title_tab">
         <item>Movies</item>
