@@ -55,6 +55,8 @@ public class FavoriteFragment extends Fragment {
             actionBar.setTitle(R.string.category_favorite);
         }
 
+        setHasOptionsMenu(true);
+
         return view;
     }
 

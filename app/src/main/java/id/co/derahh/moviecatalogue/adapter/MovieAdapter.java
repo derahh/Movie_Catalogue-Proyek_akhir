@@ -27,7 +27,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private Context mContext;
     private Movie movie;
-    private List<String> items;
 
     public ArrayList<Movie> getListData() {
         return listData;
@@ -36,10 +35,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public void setListData(ArrayList<Movie> listData) {
         this.listData.clear();
         this.listData = listData;
+        listDataFull = new ArrayList<>(listData);
         notifyDataSetChanged();
     }
 
     private ArrayList<Movie> listData = new ArrayList<>();
+    private ArrayList<Movie> listDataFull;
 
     public MovieAdapter(Context context) {
         mContext = context;
@@ -77,14 +78,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                List<Movie> filteredList = new ArrayList<>();
+                ArrayList<Movie> filteredList = new ArrayList<>();
 
                 if (constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(listData);
+                    filteredList.addAll(listDataFull);
                 } else {
                     String filterPattern = constraint.toString().toLowerCase().trim();
 
-                    for (Movie movie : listData){
+                    for (Movie movie : listDataFull){
                         if (movie.getTitle().toLowerCase().contains(filterPattern)){
                             filteredList.add(movie);
                         }

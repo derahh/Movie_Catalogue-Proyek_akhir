@@ -8,18 +8,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
 
-public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder> {
+public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder> implements Filterable {
 
     private Context mContext;
     private TvShow tvShow;
@@ -30,10 +34,12 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     public void setListData(ArrayList<TvShow> listData) {
         this.listData.clear();
         this.listData = listData;
+        listDataFull = new ArrayList<>(listData);
         notifyDataSetChanged();
     }
 
     private ArrayList<TvShow> listData = new ArrayList<>();
+    private ArrayList<TvShow> listDataFull;
 
     public TvShowAdapter(Context context) {
         mContext = context;
@@ -64,6 +70,38 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     @Override
     public int getItemCount() {
         return getListData().size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<TvShow> filteredList = new ArrayList<>();
+
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(listDataFull);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+
+                    for (TvShow tvShow : listDataFull){
+                        if (tvShow.getTitle().toLowerCase().contains(filterPattern)){
+                            filteredList.add(tvShow);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                listData.clear();
+                listData.addAll((List)results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class TvShowViewHolder extends RecyclerView.ViewHolder {

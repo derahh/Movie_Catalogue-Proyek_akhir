@@ -51,11 +51,11 @@ public class TvShowFavoriteFragment extends Fragment implements LoadTvShowCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_list,container, false);
+        View view = inflater.inflate(R.layout.list_favorite,container, false);
 
         progressBar = view.findViewById(R.id.progress_bar);
         tvNoData = view.findViewById(R.id.tv_no_data);
-        recyclerView = view.findViewById(R.id.list);
+        recyclerView = view.findViewById(R.id.list_favorite);
 
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
