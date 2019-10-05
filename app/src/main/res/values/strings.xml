@@ -24,4 +24,8 @@
         <item>Movie Detail</item>
         <item>TV Show Detail</item>
     </string-array>
+
+    <string name="appwidget_text">Favorite Movie</string>
+    <string name="add_widget">FAVORITE MOVIE BANNER</string>
+    <string name="empty_text">NO DATA</string>
 </resources>

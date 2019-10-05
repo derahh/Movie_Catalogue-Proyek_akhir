@@ -15,6 +15,10 @@
     <string name="category_favorite">Favorit</string>
     <string name="search">Cari</string>
 
+    <string name="appwidget_text">Film Favorite</string>
+    <string name="add_widget">BANNER FILM FAVORITE</string>
+    <string name="empty_text">DATA KOSONG</string>
+
     <string-array name="data_title_tab">
         <item>Film</item>
         <item>Acara TV</item>
