@@ -39,8 +39,8 @@
     <string name="title_daily_reminder">Daily Reminder</string>
     <string name="switch_text_release_reminder">Reminder showing the movie that released today</string>
     <string name="switch_text_daily_reminder">Reminder to return to app</string>
-    <string name="daily_remider">Daily Reminder</string>
-    <string name="open_app_again">Have you open Movie Catalogue App? Do not forget to open the app</string>
     <string name="toast_failed">Failed load today release movie.</string>
     <string name="release_today">Movie Release Today</string>
+    <string name="reminder_setting">Reminder Setting</string>
+    <string name="message_daily">Movie Catalogue missing you</string>
 </resources>

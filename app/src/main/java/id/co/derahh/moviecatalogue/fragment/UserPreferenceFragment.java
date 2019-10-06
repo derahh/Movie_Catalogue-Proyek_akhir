@@ -2,13 +2,14 @@ package id.co.derahh.moviecatalogue.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.SwitchPreference;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 
 import id.co.derahh.moviecatalogue.R;
+import id.co.derahh.moviecatalogue.receiver.DailyReminderReceiver;
+import id.co.derahh.moviecatalogue.receiver.ReleaseTodayReminderReceiver;
 
-public class UserPreferenceFragment extends PreferenceFragmentCompat
-        implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class UserPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static String keyReleaseReminder, keyDailyReminder;
 
@@ -22,6 +23,14 @@ public class UserPreferenceFragment extends PreferenceFragmentCompat
         addPreferencesFromResource(R.xml.preference_user);
         init();
         setSummaries();
+    }
+
+    private void init() {
+        keyDailyReminder = getResources().getString(R.string.key_daily_reminder);
+        keyReleaseReminder = getResources().getString(R.string.key_release_reminder);
+
+        spReleaseReminder = (SwitchPreference) findPreference(keyReleaseReminder);
+        spDailyReminder = (SwitchPreference) findPreference(keyDailyReminder);
     }
 
     @Override
@@ -72,13 +81,5 @@ public class UserPreferenceFragment extends PreferenceFragmentCompat
         } else {
             releaseTodayReminderReceiver.cancelAlarm(getActivity());
         }
-    }
-
-    private void init() {
-        keyDailyReminder = getResources().getString(R.string.key_daily_reminder);
-        keyReleaseReminder = getResources().getString(R.string.key_release_reminder);
-
-        spReleaseReminder = (SwitchPreference) findPreference(keyReleaseReminder);
-        spDailyReminder = (SwitchPreference) findPreference(keyDailyReminder);
     }
 }

@@ -12,8 +12,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
-import com.android.example.moviewcatalogue.R;
-import com.android.example.moviewcatalogue.model.Movie;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -29,12 +27,13 @@ import java.util.List;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import id.co.derahh.moviecatalogue.Model.Movie;
+import id.co.derahh.moviecatalogue.R;
 
 public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
 
-    private static final String API_KEY = "af47732ccfe067085f13970fee065143";
+    private static final String API_KEY = "06b9cd349f041c2e51292a90868062fc";
     private static final int NOTIF_ID_REPEATING = 102;
-    private static int notifId;
     private static final String CHANNEL_ID = "todayremainder" ;
     public static CharSequence CHANNEL_NAME = "NOTIFICATION";
     private List<Movie> movieList = new ArrayList<>();
@@ -44,7 +43,6 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        notifId = 1;
         final String title = context.getString(R.string.release_today);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -114,8 +112,8 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 38);
         calendar.set(Calendar.SECOND, 0);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),

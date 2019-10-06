@@ -26,8 +26,8 @@ public class DailyReminderReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String message = context.getString(R.string.open_app_again);
-        String title = context.getString(R.string.daily_remider);
+        String message = context.getString(R.string.message_daily);
+        String title = context.getString(R.string.app_name);
         showAlarmNotification(context, title, message);
     }
 
@@ -39,7 +39,6 @@ public class DailyReminderReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.ic_notifications_white_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSubText(message)
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -63,9 +62,9 @@ public class DailyReminderReceiver extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.SECOND, 30);
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
                 calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY,
@@ -84,7 +83,6 @@ public class DailyReminderReceiver extends BroadcastReceiver {
     }
 
     private static PendingIntent getPendingIntent(Context context) {
-
         Intent intent = new Intent(context, DailyReminderReceiver.class);
         return PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
