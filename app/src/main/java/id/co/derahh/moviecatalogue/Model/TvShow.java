@@ -1,9 +1,17 @@
 package id.co.derahh.moviecatalogue.Model;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.json.JSONObject;
+
+import id.co.derahh.moviecatalogue.database.DatabaseContract.TvShowColumns;
+
+import static android.provider.BaseColumns._ID;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnDouble;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnInt;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnString;
 
 public class TvShow implements Parcelable {
 
@@ -30,6 +38,15 @@ public class TvShow implements Parcelable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public TvShow(Cursor cursor){
+        this.id = getColumnInt(cursor, _ID);
+        this.userScore = getColumnDouble(cursor, TvShowColumns.userScore);
+        this.title = getColumnString(cursor, TvShowColumns.title);
+        this.year = getColumnString(cursor, TvShowColumns.year);
+        this.description = getColumnString(cursor, TvShowColumns.description);
+        this.photo = getColumnString(cursor, TvShowColumns.photo);
     }
 
     public int getId() {

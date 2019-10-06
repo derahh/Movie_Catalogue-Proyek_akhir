@@ -4,11 +4,14 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns;
+
 import org.json.JSONObject;
 
 import static android.provider.BaseColumns._ID;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnDouble;
 import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnInt;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnString;
 
 public class Movie implements Parcelable {
 
@@ -39,6 +42,11 @@ public class Movie implements Parcelable {
 
     public Movie(Cursor cursor){
         this.id = getColumnInt(cursor, _ID);
+        this.userScore = getColumnDouble(cursor, MovieColumns.userScore);
+        this.title = getColumnString(cursor, MovieColumns.title);
+        this.year = getColumnString(cursor, MovieColumns.year);
+        this.description = getColumnString(cursor, MovieColumns.description);
+        this.photo = getColumnString(cursor, MovieColumns.photo);
     }
 
     public int getId() {
