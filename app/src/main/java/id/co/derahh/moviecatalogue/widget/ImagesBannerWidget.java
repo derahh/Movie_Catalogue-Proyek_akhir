@@ -3,11 +3,14 @@ package id.co.derahh.moviecatalogue.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import java.util.Objects;
 
 import id.co.derahh.moviecatalogue.R;
 
@@ -18,6 +21,7 @@ public class ImagesBannerWidget extends AppWidgetProvider {
 
     private static final String TOAST_ACTION = "id.co.derahh.moviecatalogue.TOAST_ACTION";
     public static final String EXTRA_ITEM = "id.co.derahh.moviecatalogue.EXTRA_ITEM";
+    public static final String UPDATE_WIDGET = "id.co.derahh.moviecatalogue.UPDATE_WIDGET";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -53,9 +57,15 @@ public class ImagesBannerWidget extends AppWidgetProvider {
         super.onReceive(context, intent);
         if (intent.getAction() != null) {
             if (intent.getAction().equals(TOAST_ACTION)) {
-                int viewIndex = intent.getIntExtra(EXTRA_ITEM, 0);
+                String viewIndex = intent.getStringExtra(EXTRA_ITEM);
                 Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
             }
+        }
+        if (Objects.equals(intent.getAction(), UPDATE_WIDGET)){
+            AppWidgetManager gm = AppWidgetManager.getInstance(context);
+            int[] ids = gm.getAppWidgetIds(new ComponentName(context, ImagesBannerWidget.class));
+
+            gm.notifyAppWidgetViewDataChanged(ids ,R.id.stack_view);
         }
     }
 

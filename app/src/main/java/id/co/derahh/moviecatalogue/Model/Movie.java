@@ -1,9 +1,14 @@
 package id.co.derahh.moviecatalogue.Model;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.json.JSONObject;
+
+import static android.provider.BaseColumns._ID;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.getColumnInt;
 
 public class Movie implements Parcelable {
 
@@ -30,6 +35,10 @@ public class Movie implements Parcelable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Movie(Cursor cursor){
+        this.id = getColumnInt(cursor, _ID);
     }
 
     public int getId() {

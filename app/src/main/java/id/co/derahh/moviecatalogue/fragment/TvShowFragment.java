@@ -80,6 +80,7 @@ public class TvShowFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
                 return false;
             }
 
