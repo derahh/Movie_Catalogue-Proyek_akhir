@@ -65,12 +65,12 @@ public class TvShowFavoriteAdapter extends RecyclerView.Adapter<TvShowFavoriteAd
         return getListData().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         final TextView tvTitle, tvDescription;
         final ImageView imgPhoto;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvDescription = itemView.findViewById(R.id.tv_description);

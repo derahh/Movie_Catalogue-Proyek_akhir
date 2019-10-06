@@ -1,13 +1,9 @@
 package id.co.derahh.moviecatalogue.fragment;
 
 
-import android.app.SearchManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -19,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -32,8 +27,6 @@ import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.adapter.MovieAdapter;
 import id.co.derahh.moviecatalogue.viewModel.MovieViewModel;
-
-import static android.support.v4.content.ContextCompat.getSystemService;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -9,7 +9,7 @@ import id.co.derahh.moviecatalogue.database.DatabaseContract.TvShowColumns;
 
 public class DatabaseHelper extends SQLiteOpenHelper{
 
-    public static String DATABASE_NAME = "dbmoviecatalogue";
+    private static String DATABASE_NAME = "dbmoviecatalogue";
 
     private static final int DATABASE_VERSION = 1;
 

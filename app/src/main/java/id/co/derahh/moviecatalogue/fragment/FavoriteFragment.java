@@ -70,6 +70,8 @@ public class FavoriteFragment extends Fragment {
         if (item.getItemId() == R.id.action_change_settings){
             Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
             startActivity(mIntent);
+        } else if (item.getItemId() == R.id.action_preference_settings) {
+
         }
         return super.onOptionsItemSelected(item);
     }

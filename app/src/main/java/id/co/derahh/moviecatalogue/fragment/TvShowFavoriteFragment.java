@@ -18,13 +18,10 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 import id.co.derahh.moviecatalogue.LoadTvShowCallback;
-import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.adapter.TvShowFavoriteAdapter;
-import id.co.derahh.moviecatalogue.database.MovieHelper;
 import id.co.derahh.moviecatalogue.database.TvShowHelper;
-import id.co.derahh.moviecatalogue.viewModel.MovieViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

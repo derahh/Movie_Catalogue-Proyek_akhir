@@ -110,7 +110,7 @@ public class DetailActivity extends AppCompatActivity{
     }
 
     private int getUserScoreColor(double userScore){
-        int userSCoreColorResourceId = 0;
+        int userSCoreColorResourceId;
         if (userScore < 7.0){
             userSCoreColorResourceId = R.color.user_score1;
         }else {

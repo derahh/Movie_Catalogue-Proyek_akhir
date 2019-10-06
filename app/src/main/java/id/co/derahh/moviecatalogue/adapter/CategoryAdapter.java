@@ -7,10 +7,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import id.co.derahh.moviecatalogue.fragment.MovieFavoriteFragment;
-import id.co.derahh.moviecatalogue.fragment.MovieFragment;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.fragment.TvShowFavoriteFragment;
-import id.co.derahh.moviecatalogue.fragment.TvShowFragment;
 
 
 public class CategoryAdapter extends FragmentPagerAdapter {

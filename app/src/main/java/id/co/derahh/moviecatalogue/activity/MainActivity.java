@@ -1,25 +1,12 @@
 package id.co.derahh.moviecatalogue.activity;
 
-import android.content.Intent;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import id.co.derahh.moviecatalogue.adapter.CategoryAdapter;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.fragment.FavoriteFragment;
 import id.co.derahh.moviecatalogue.fragment.MovieFragment;
@@ -27,10 +14,8 @@ import id.co.derahh.moviecatalogue.fragment.TvShowFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOAD_FRAGMENT_MAIN_MENU = "load_fragment_main_menu";
     public static final String KEY_FRAGMENT = "fragment";
 
-    private BottomNavigationView bottomNavigationView;
     private Fragment fragment = new MovieFragment();
 
     @Override
@@ -38,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

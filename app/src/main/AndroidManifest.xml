@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activity.UserPreferenceActivity"></activity>
+
         <receiver android:name=".widget.ImagesBannerWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -41,7 +43,7 @@
 
         <service
             android:name=".widget.StackWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

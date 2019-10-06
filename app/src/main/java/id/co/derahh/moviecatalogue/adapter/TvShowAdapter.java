@@ -1,6 +1,5 @@
 package id.co.derahh.moviecatalogue.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
@@ -27,7 +25,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
 
     private Context mContext;
     private TvShow tvShow;
-    public ArrayList<TvShow> getListData() {
+    private ArrayList<TvShow> getListData() {
         return listData;
     }
 
@@ -104,12 +102,12 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
         };
     }
 
-    public class TvShowViewHolder extends RecyclerView.ViewHolder {
+    class TvShowViewHolder extends RecyclerView.ViewHolder {
 
         final TextView tvTitle, tvDescription;
         final ImageView imgPhoto;
 
-        public TvShowViewHolder(@NonNull View itemView) {
+        TvShowViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvDescription = itemView.findViewById(R.id.tv_description);
