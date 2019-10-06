@@ -18,6 +18,7 @@
     <string name="appwidget_text">Film Favorite</string>
     <string name="add_widget">BANNER FILM FAVORITE</string>
     <string name="empty_text">DATA KOSONG</string>
+    <string name="user_preference">Pengaturan Preferensi Pengguna</string>
 
     <string-array name="data_title_tab">
         <item>Film</item>

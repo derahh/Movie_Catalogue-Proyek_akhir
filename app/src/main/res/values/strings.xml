@@ -28,4 +28,5 @@
     <string name="appwidget_text">Favorite Movie</string>
     <string name="add_widget">FAVORITE MOVIE BANNER</string>
     <string name="empty_text">NO DATA</string>
+    <string name="user_preference">User Preference Setting</string>
 </resources>
