@@ -18,6 +18,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 
 import id.co.derahh.moviecatalogue.R;
+import id.co.derahh.moviecatalogue.activity.UserPreferenceActivity;
 import id.co.derahh.moviecatalogue.adapter.CategoryAdapter;
 
 /**
@@ -71,7 +72,8 @@ public class FavoriteFragment extends Fragment {
             Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
             startActivity(mIntent);
         } else if (item.getItemId() == R.id.action_preference_settings) {
-
+            Intent mIntent = new Intent(getContext(), UserPreferenceActivity.class);
+            startActivity(mIntent);
         }
         return super.onOptionsItemSelected(item);
     }

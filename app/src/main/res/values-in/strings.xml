@@ -20,6 +20,20 @@
     <string name="empty_text">DATA KOSONG</string>
     <string name="user_preference">Pengaturan Preferensi Pengguna</string>
 
+    <string name="off">Mati</string>
+    <string name="on">Nyala</string>
+
+    <string name="title_release_reminder">Pengingat Rilis</string>
+    <string name="key_release_reminder">pengingat_rilis</string>
+    <string name="key_daily_reminder">pengingat_harian</string>
+    <string name="title_daily_reminder">Pengingat Harian</string>
+    <string name="switch_text_release_reminder">Pengingat menunjukkan film yang dirilis hari ini</string>
+    <string name="switch_text_daily_reminder">Pengingat untuk kembali ke aplikasi</string>
+    <string name="daily_remider">Pengingat Harian</string>
+    <string name="open_app_again">Sudahkah Anda membuka Aplikasi Katalog Film? Jangan lupa untuk membuka aplikasi</string>
+    <string name="toast_failed">Gagal memuat film rilis hari ini</string>
+    <string name="release_today">Rilis Film Hari Ini</string>
+
     <string-array name="data_title_tab">
         <item>Film</item>
         <item>Acara TV</item>
