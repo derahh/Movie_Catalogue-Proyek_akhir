@@ -8,15 +8,17 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -29,6 +31,7 @@ import java.util.Locale;
 import cz.msebera.android.httpclient.Header;
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.R;
+import id.co.derahh.moviecatalogue.activity.DetailActivity;
 
 public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
 
@@ -50,35 +53,100 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
         final String currentDate = sdf.format(date);
 
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY +
-                "&primary_release_date.gte=" + currentDate + "&primary_release_date.lte=" + currentDate;
+        String url = "https://api.themoviedb.org/3/discover/movie?api_key="+ API_KEY +"&primary_release_date.gte="+ currentDate +"&primary_release_date.lte="+ currentDate;
+
         client.get(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String result = new String(responseBody);
                 try {
+                    String result = new String(responseBody);
                     JSONObject responseObject = new JSONObject(result);
-                    JSONArray movieResults = responseObject.getJSONArray("results");
-                    for (int i = 0; i < movieResults.length(); i++) {
-                        JSONObject currentMovie = movieResults.getJSONObject(i);
-                        Movie movie = new Movie(currentMovie);
-                        movieList.add(movie);
-                    }
-                    if (movieList.size() > 0) {
-                        for (int i = 0; i < movieList.size(); i++) {
-                            Movie movie2 = movieList.get(i);
-                            showAlarmNotification(context, title, movie2.getTitle(), i);
+                    JSONArray results = responseObject.getJSONArray("results");
+
+                    for (int i = 0; i < results.length(); i++) {
+                        JSONObject movie = results.getJSONObject(i);
+                        Movie listMovie = new Movie(movie);
+                        if (!listMovie.getPhoto().equals("null")) {
+                            showNotification(context, listMovie);
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                } catch (Exception e) {
+                    Log.d("Exception", e.getMessage());
                 }
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Toast.makeText(context, R.string.toast_failed, Toast.LENGTH_SHORT).show();
+                Log.d("onFailure", "Get data failed!");
             }
         });
+
+//        AsyncHttpClient client = new AsyncHttpClient();
+//        String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&primary_release_date.gte=" + currentDate + "&primary_release_date.lte=" + currentDate;
+//        client.get(url, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                String result = new String(responseBody);
+//                try {
+//                    JSONObject responseObject = new JSONObject(result);
+//                    JSONArray movieResults = responseObject.getJSONArray("results");
+//                    for (int i = 0; i < movieResults.length(); i++) {
+//                        JSONObject currentMovie = movieResults.getJSONObject(i);
+//                        Movie movie = new Movie(currentMovie);
+//                        movieList.add(movie);
+//                    }
+//                    if (movieList.size() > 0) {
+//                        for (int i = 0; i < movieList.size(); i++) {
+//                            Movie movie2 = movieList.get(i);
+//                            showAlarmNotification(context, title, movie2.getTitle(), i);
+//                        }
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                Toast.makeText(context, R.string.toast_failed, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+    }
+
+    private void showNotification(Context context, Movie movie) {
+
+        Intent intent = new Intent(context, DetailActivity.class);
+        Uri uri = Uri.parse(CONTENT_URI_MOVIE + "/" + movie.getId());
+        intent.setData(uri);
+        intent.putExtra(DetailActivity.EXTRA_TYPE, "movie");
+        intent.putExtra(DetailActivity.EXTRA_ID, movie.getId());
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_movie_black_24dp)
+                .setContentTitle(context.getString(R.string.message_release_today_reminder))
+                .setContentText(movie.getTitle() + context.getString(R.string.has_release_today))
+                .setColor(ContextCompat.getColor(context, android.R.color.transparent))
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setSound(alarmSound)
+                .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+
+            builder.setChannelId(CHANNEL_ID);
+
+            if (notificationManager != null) notificationManager.createNotificationChannel(channel);
+        }
+
+        Notification notification = builder.build();
+        if (notificationManager != null) notificationManager.notify(movie.getId(), notification);
     }
 
     private void showAlarmNotification(Context context, String title, String content, int notifId) {

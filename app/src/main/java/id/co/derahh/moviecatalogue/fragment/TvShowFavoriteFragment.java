@@ -1,8 +1,11 @@
 package id.co.derahh.moviecatalogue.fragment;
 
 
+import android.content.Context;
+import android.database.ContentObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -143,6 +146,20 @@ public class TvShowFavoriteFragment extends Fragment implements LoadTvShowCallba
             super.onPostExecute(tvShows);
             weakCallback.get().postExecute(tvShows);
             Log.d(TAG, "onPostExecute: ");
+        }
+    }
+
+    public static class DataObserver extends ContentObserver {
+        final Context context;
+
+        public DataObserver(Handler handler, Context context) {
+            super(handler);
+            this.context = context;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
         }
     }
 }
