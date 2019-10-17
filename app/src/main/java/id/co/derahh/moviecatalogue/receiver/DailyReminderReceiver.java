@@ -8,18 +8,27 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import id.co.derahh.moviecatalogue.R;
+import id.co.derahh.moviecatalogue.activity.MainActivity;
 
 public class DailyReminderReceiver extends BroadcastReceiver {
 
     private static final int NOTIF_ID_REPEATING = 101;
     private static final String CHANNEL_ID = "dailyalarm" ;
     public static CharSequence CHANNEL_NAME = "NOTIFICATION";
+    private final String TIME_FORMAT = "HH:mm";
 
     public DailyReminderReceiver() {
     }
@@ -32,59 +41,74 @@ public class DailyReminderReceiver extends BroadcastReceiver {
     }
 
     private void showAlarmNotification(Context context, String title, String message) {
-        NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Intent intent = new Intent(context, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifications_white_24dp)
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_movie_black_24dp)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setColor(ContextCompat.getColor(context, android.R.color.transparent))
+                .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
+                .setSound(alarmSound)
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new
-                    NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            mBuilder.setChannelId(CHANNEL_ID);
-            if (mNotificationManager != null) {
-                mNotificationManager.createNotificationChannel(channel);
-            }
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{1000, 1000, 1000, 1000, 1000});
+
+            builder.setChannelId(CHANNEL_ID);
+
+            if (notificationManager != null) notificationManager.createNotificationChannel(channel);
         }
 
-        Notification notification = mBuilder.build();
-
-        if (mNotificationManager != null) {
-            mNotificationManager.notify(DailyReminderReceiver.NOTIF_ID_REPEATING, notification);
-        }
+        Notification notification = builder.build();
+        if (notificationManager != null) notificationManager.notify(NOTIF_ID_REPEATING, notification);
     }
 
-    public void setRepeatingAlarm(Context context) {
-        cancelAlarm(context);
+    public void setRepeatingAlarm(Context context, String time) {
+        if (isTimeInvalid(time, TIME_FORMAT)) return;
+
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, DailyReminderReceiver.class);
+
+        String[] timeArray = time.split(":");
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 3);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                getPendingIntent(context));
+
+        if (calendar.before(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, DailyReminderReceiver.class);
-        PendingIntent pendingIntent =
-                PendingIntent.getBroadcast(context, 101, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         if (alarmManager != null) {
             alarmManager.cancel(pendingIntent);
         }
     }
 
-    private static PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(context, DailyReminderReceiver.class);
-        return PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+    private boolean isTimeInvalid(String time, String format) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
+            dateFormat.setLenient(false);
+            dateFormat.parse(time);
+            return false;
+        } catch (ParseException e) {
+            return true;
+        }
     }
 }

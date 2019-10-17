@@ -3,6 +3,15 @@
     package="id.co.derahh.moviecatalogue">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <permission
+        android:name="id.co.derahh.moviecatalogue.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="id.co.derahh.moviecatalogue.WRITE_DATABASE"
+        android:protectionLevel="normal" />
 
     <application
         android:icon="@mipmap/ic_launcher"
@@ -50,6 +59,21 @@
         <service
             android:name=".widget.StackWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+        
+        <provider
+            android:authorities="id.co.derahh.moviecatalogue"
+            android:name=".provider.FavoriteProvider"
+            android:exported="true"
+            android:readPermission="id.co.derahh.moviecatalogue.READ_DATABASE"
+            android:writePermission="id.co.derahh.moviecatalogue.WRITE_DATABASE"/>
+
+        <receiver android:name=".receiver.DailyReminderReceiver"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <receiver android:name=".receiver.ReleaseTodayReminderReceiver"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

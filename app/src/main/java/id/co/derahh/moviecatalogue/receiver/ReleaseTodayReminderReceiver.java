@@ -21,6 +21,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +34,7 @@ import cz.msebera.android.httpclient.Header;
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
+import id.co.derahh.moviecatalogue.database.DatabaseContract;
 
 public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
 
@@ -40,6 +43,7 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "todayremainder" ;
     public static CharSequence CHANNEL_NAME = "NOTIFICATION";
     private List<Movie> movieList = new ArrayList<>();
+    private final String TIME_FORMAT = "HH:mm";
 
     public ReleaseTodayReminderReceiver() {
     }
@@ -81,44 +85,14 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
                 Log.d("onFailure", "Get data failed!");
             }
         });
-
-//        AsyncHttpClient client = new AsyncHttpClient();
-//        String url = "https://api.themoviedb.org/3/discover/movie?api_key=" + API_KEY + "&primary_release_date.gte=" + currentDate + "&primary_release_date.lte=" + currentDate;
-//        client.get(url, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                String result = new String(responseBody);
-//                try {
-//                    JSONObject responseObject = new JSONObject(result);
-//                    JSONArray movieResults = responseObject.getJSONArray("results");
-//                    for (int i = 0; i < movieResults.length(); i++) {
-//                        JSONObject currentMovie = movieResults.getJSONObject(i);
-//                        Movie movie = new Movie(currentMovie);
-//                        movieList.add(movie);
-//                    }
-//                    if (movieList.size() > 0) {
-//                        for (int i = 0; i < movieList.size(); i++) {
-//                            Movie movie2 = movieList.get(i);
-//                            showAlarmNotification(context, title, movie2.getTitle(), i);
-//                        }
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                Toast.makeText(context, R.string.toast_failed, Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
 
     private void showNotification(Context context, Movie movie) {
 
         Intent intent = new Intent(context, DetailActivity.class);
-        Uri uri = Uri.parse(CONTENT_URI_MOVIE + "/" + movie.getId());
+        Uri uri = Uri.parse(DatabaseContract.MovieColumns.CONTENT_URI + "/" + movie.getId());
         intent.setData(uri);
-        intent.putExtra(DetailActivity.EXTRA_TYPE, "movie");
+        intent.putExtra(DetailActivity.EXTRA_MOVIE, "movie");
         intent.putExtra(DetailActivity.EXTRA_ID, movie.getId());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
@@ -128,7 +102,7 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_movie_black_24dp)
-                .setContentTitle(context.getString(R.string.message_release_today_reminder))
+                .setContentTitle(context.getString(R.string.release_today))
                 .setContentText(movie.getTitle() + context.getString(R.string.has_release_today))
                 .setColor(ContextCompat.getColor(context, android.R.color.transparent))
                 .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
@@ -149,56 +123,44 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
         if (notificationManager != null) notificationManager.notify(movie.getId(), notification);
     }
 
-    private void showAlarmNotification(Context context, String title, String content, int notifId) {
-        NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifications_white_24dp)
-                .setContentTitle(title)
-                .setContentText(content)
-                .setAutoCancel(true);
+    public void setRepeatingAlarm(Context context, String time) {
+        if (isTimeInvalid(time, TIME_FORMAT)) return;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel =
-                    new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-            mBuilder.setChannelId(CHANNEL_ID);
-            if (mNotificationManager != null) {
-                mNotificationManager.createNotificationChannel(channel);
-            }
-        }
-
-        Notification notification = mBuilder.build();
-
-        if (mNotificationManager != null) {
-            mNotificationManager.notify(notifId, notification);
-        }
-    }
-
-    public void setRepeatingAlarm(Context context) {
-        cancelAlarm(context);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, ReleaseTodayReminderReceiver.class);
+
+        String[] timeArray = time.split(":");
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);
-        calendar.set(Calendar.MINUTE, 38);
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArray[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
         calendar.set(Calendar.SECOND, 0);
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                getPendingIntent(context));
+
+        if (calendar.before(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (alarmManager != null) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
     }
 
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager != null) {
-            alarmManager.cancel(getPendingIntent(context));
+            Intent intent = new Intent(context, ReleaseTodayReminderReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            alarmManager.cancel(pendingIntent);
         }
     }
 
-    private static PendingIntent getPendingIntent(Context context) {
-        Intent intent = new Intent(context, ReleaseTodayReminderReceiver.class);
-        return PendingIntent.getBroadcast(context, NOTIF_ID_REPEATING, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
+    private boolean isTimeInvalid(String time, String format) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat(format, Locale.getDefault());
+            dateFormat.setLenient(false);
+            dateFormat.parse(time);
+            return false;
+        } catch (ParseException e) {
+            return true;
+        }
     }
 }

@@ -27,6 +27,7 @@ public class DetailActivity extends AppCompatActivity{
     ImageView imgPhoto;
     boolean isAlreadyLoved = false;
 
+    public static final String EXTRA_ID = "extra_id";
     public static final String EXTRA_MOVIE = "extra_movie";
     public static final String EXTRA_TV_SHOW = "extra_tv_show";
 

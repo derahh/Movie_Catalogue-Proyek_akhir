@@ -1,15 +1,16 @@
 package id.co.derahh.moviecatalogue.fragment;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v14.preference.SwitchPreference;
+import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.widget.Toast;
 
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.receiver.DailyReminderReceiver;
 import id.co.derahh.moviecatalogue.receiver.ReleaseTodayReminderReceiver;
 
-public class UserPreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class UserPreferenceFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
     public static String keyReleaseReminder, keyDailyReminder;
 
@@ -22,7 +23,6 @@ public class UserPreferenceFragment extends PreferenceFragmentCompat implements 
     public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.preference_user);
         init();
-        setSummaries();
     }
 
     private void init() {
@@ -30,56 +30,34 @@ public class UserPreferenceFragment extends PreferenceFragmentCompat implements 
         keyReleaseReminder = getResources().getString(R.string.key_release_reminder);
 
         spReleaseReminder = (SwitchPreference) findPreference(keyReleaseReminder);
+        spReleaseReminder.setOnPreferenceChangeListener(this);
+
         spDailyReminder = (SwitchPreference) findPreference(keyDailyReminder);
+        spDailyReminder.setOnPreferenceChangeListener(this);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        String key =preference.getKey();
+        boolean state = (boolean) newValue;
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equalsIgnoreCase(keyDailyReminder)) {
-            boolean isDailryReminderChecked = sharedPreferences.getBoolean(keyDailyReminder, false);
-            if (isDailryReminderChecked) {
-                dailyReceiver.setRepeatingAlarm(getActivity());
+        if (key.equals(keyDailyReminder)) {
+            if (state) {
+                dailyReceiver.setRepeatingAlarm(getActivity(), "07:00");
+                Toast.makeText(getActivity(), "Daily Reminder setup", Toast.LENGTH_SHORT).show();
             } else {
                 dailyReceiver.cancelAlarm(getActivity());
+                Toast.makeText(getActivity(), "Cancel Daily Reminder", Toast.LENGTH_SHORT).show();
             }
-        }
-
-        if (key.equalsIgnoreCase(keyReleaseReminder)) {
-            boolean isTodayRelaseReminder = sharedPreferences.getBoolean(keyDailyReminder, false);
-            if (isTodayRelaseReminder) {
-                releaseTodayReminderReceiver.setRepeatingAlarm(getActivity());
+        } else if (key.equals(keyReleaseReminder)) {
+            if (state) {
+                releaseTodayReminderReceiver.setRepeatingAlarm(getActivity(), "22:42");
+                Toast.makeText(getActivity(), "Release Reminder setup", Toast.LENGTH_SHORT).show();
             } else {
                 releaseTodayReminderReceiver.cancelAlarm(getActivity());
+                Toast.makeText(getActivity(), "Cancel Release Reminder", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void setSummaries() {
-        SharedPreferences sh = getPreferenceManager().getSharedPreferences();
-        boolean isDailryReminderChecked = sh.getBoolean(keyDailyReminder, false);
-        if (isDailryReminderChecked) {
-            dailyReceiver.setRepeatingAlarm(getActivity());
-        } else {
-            dailyReceiver.cancelAlarm(getActivity());
-        }
-
-        boolean isTodayRelaseReminder = sh.getBoolean(keyDailyReminder, false);
-        if (isTodayRelaseReminder) {
-            releaseTodayReminderReceiver.setRepeatingAlarm(getActivity());
-        } else {
-            releaseTodayReminderReceiver.cancelAlarm(getActivity());
-        }
+        return true;
     }
 }
