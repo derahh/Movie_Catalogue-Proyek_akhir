@@ -43,4 +43,6 @@
     <string name="release_today">Movie Release Today</string>
     <string name="reminder_setting">Reminder Setting</string>
     <string name="message_daily">Movie Catalogue missing you</string>
+    <string name="search_movie">Search Movie</string>
+    <string name="search_tv_show">Search Tv Show</string>
 </resources>

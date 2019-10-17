@@ -26,7 +26,7 @@ public class SearchViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Movie>> listSearchMovies = new MutableLiveData<>();
     private MutableLiveData<ArrayList<TvShow>> listSearchTvShow = new MutableLiveData<>();
 
-    public void searchMovie() {
+    public void searchMovie(String query) {
         Log.d(TAG, "Running");
         AsyncHttpClient client = new AsyncHttpClient();
         final ArrayList<Movie> list = new ArrayList<>();
@@ -39,7 +39,7 @@ public class SearchViewModel extends ViewModel {
             language = "en-US";
         }
 
-        String url = "https://api.themoviedb.org/4/discover/movie?api_key=" + API_KEY + "&language=" + language;
+        String url = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&language=" + currentLanguage + "&query=" + query;
         Log.e(TAG, "setMovie: " + url);
 
         client.get(url, new AsyncHttpResponseHandler() {
@@ -70,7 +70,7 @@ public class SearchViewModel extends ViewModel {
         return listSearchMovies;
     }
 
-    public void searchTvShow() {
+    public void searchTvShow(String query) {
         Log.d(TAG, "Running");
         AsyncHttpClient client = new AsyncHttpClient();
         final ArrayList<TvShow> list = new ArrayList<>();
@@ -83,7 +83,7 @@ public class SearchViewModel extends ViewModel {
             language = "en-US";
         }
 
-        String url = "https://api.themoviedb.org/4/discover/movie?api_key=" + API_KEY + "&language=" + language;
+        String url = " https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&language=" + currentLanguage + "&query=" + query;
         Log.e(TAG, "setTvShow: " + url);
 
         client.get(url, new AsyncHttpResponseHandler() {

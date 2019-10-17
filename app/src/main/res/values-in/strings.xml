@@ -33,6 +33,8 @@
     <string name="release_today">Rilis Film Hari Ini</string>
     <string name="reminder_setting">Pengaturan Pengingat</string>
     <string name="message_daily">Katalog Film merindukanmu</string>
+    <string name="search_movie">Cari Film</string>
+    <string name="search_tv_show">Cari Acara TV</string>
 
     <string-array name="data_title_tab">
         <item>Film</item>
