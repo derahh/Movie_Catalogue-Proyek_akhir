@@ -51,7 +51,7 @@ public class UserPreferenceFragment extends PreferenceFragmentCompat implements 
             }
         } else if (key.equals(keyReleaseReminder)) {
             if (state) {
-                releaseTodayReminderReceiver.setRepeatingAlarm(getActivity(), "22:42");
+                releaseTodayReminderReceiver.setRepeatingAlarm(getActivity(), "08:00");
                 Toast.makeText(getActivity(), "Release Reminder setup", Toast.LENGTH_SHORT).show();
             } else {
                 releaseTodayReminderReceiver.cancelAlarm(getActivity());

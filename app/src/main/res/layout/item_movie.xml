@@ -32,6 +32,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="@string/title_movie"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -49,6 +50,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:text="@string/lorem"
+        android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_photo"
         app:layout_constraintTop_toTopOf="@+id/guideline" />
