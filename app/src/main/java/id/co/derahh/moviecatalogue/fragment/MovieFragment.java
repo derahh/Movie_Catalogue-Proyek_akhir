@@ -2,19 +2,8 @@ package id.co.derahh.moviecatalogue.fragment;
 
 
 import android.app.SearchManager;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +12,17 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -38,8 +38,6 @@ import id.co.derahh.moviecatalogue.viewModel.SearchViewModel;
  */
 public class MovieFragment extends Fragment {
 
-    private static final String KEY_QUERY = "query";
-
     RecyclerView recyclerView;
     LinearLayoutManager linearLayoutManager;
     MovieViewModel viewModel;
@@ -47,7 +45,6 @@ public class MovieFragment extends Fragment {
     TextView tvNoData;
     MovieAdapter adapter;
     SearchViewModel searchViewModel;
-    String query;
 
 
     public MovieFragment() {
@@ -67,8 +64,11 @@ public class MovieFragment extends Fragment {
         progressBar = view.findViewById(R.id.progress_bar);
         tvNoData = view.findViewById(R.id.tv_no_data);
 
-        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
-        searchViewModel.getSearchMovie().observe(this, getSearchMovie);
+//        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
+//        searchViewModel.getSearchMovie().observe(this, getSearchMovie);
+
+        viewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
+        viewModel.getMovie().observe(this, getMovie);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null){
@@ -76,22 +76,11 @@ public class MovieFragment extends Fragment {
         }
         setHasOptionsMenu(true);
 
-        if (savedInstanceState == null) {
-            loadData();
-        } else {
-            query = savedInstanceState.getString(KEY_QUERY);
-            searchMovies(query);
-        }
+        loadData();
 
         addItem();
 
         return view;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putString(KEY_QUERY, query);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -106,25 +95,15 @@ public class MovieFragment extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    query = s;
                     recyclerView.setVisibility(View.GONE);
-                    if (query.equalsIgnoreCase("")) {
-                        loadData();
-                    } else {
-                        searchMovies(s);
-                    }
+                    searchMovies(s);
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    query = s;
                     recyclerView.setVisibility(View.GONE);
-                    if (query.equalsIgnoreCase("")) {
-                        loadData();
-                    } else {
-                        searchMovies(s);
-                    }
+                    searchMovies(s);
                     return true;
                 }
             });
@@ -135,26 +114,16 @@ public class MovieFragment extends Fragment {
         @Override
         public void onChanged(@Nullable ArrayList<Movie> movies) {
             if (movies != null) {
-                if (movies.size() != 0) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    tvNoData.setVisibility(View.GONE);
-                    adapter.setListData(movies);
-                    progressBar.setVisibility(View.GONE);
-                } else {
-                    tvNoData.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.GONE);
-                }
-            } else {
-                tvNoData.setVisibility(View.VISIBLE);
+                adapter.setListData(movies);
                 progressBar.setVisibility(View.GONE);
+            }else {
+                tvNoData.setVisibility(View.VISIBLE);
             }
         }
     };
 
     private void loadData(){
-        viewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
         viewModel.setMovie();
-        viewModel.getMovie().observe(this, getMovie);
         progressBar.setVisibility(View.VISIBLE);
     }
 
@@ -176,17 +145,9 @@ public class MovieFragment extends Fragment {
         @Override
         public void onChanged(@Nullable ArrayList<Movie> movies) {
             if (movies != null) {
-                if (movies.size() != 0) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                    tvNoData.setVisibility(View.GONE);
-                    adapter.setListData(movies);
-                    progressBar.setVisibility(View.GONE);
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    tvNoData.setVisibility(View.VISIBLE);
-                }
-            } else {
+                adapter.setListData(movies);
                 progressBar.setVisibility(View.GONE);
+            }else {
                 tvNoData.setVisibility(View.VISIBLE);
             }
             adapter.filterList(movies);

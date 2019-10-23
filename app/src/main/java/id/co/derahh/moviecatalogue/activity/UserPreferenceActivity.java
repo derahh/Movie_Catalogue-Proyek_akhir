@@ -1,7 +1,7 @@
 package id.co.derahh.moviecatalogue.activity;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import id.co.derahh.moviecatalogue.R;
