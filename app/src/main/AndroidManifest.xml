@@ -7,10 +7,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <permission
-        android:name="id.co.derahh.moviecatalogue.READ_DATABASE"
+        android:name="id.co.derahh.moviecatalogue.provider.FavoriteProvider.READ_DATABASE"
         android:protectionLevel="normal" />
     <permission
-        android:name="id.co.derahh.moviecatalogue.WRITE_DATABASE"
+        android:name="id.co.derahh.moviecatalogue.provider.FavoriteProvider.WRITE_DATABASE"
         android:protectionLevel="normal" />
 
     <application

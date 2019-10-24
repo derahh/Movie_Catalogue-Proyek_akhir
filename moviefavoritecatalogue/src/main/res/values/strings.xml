@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Movie Favorite Catalogue</string>
+    <string name="lorem">lorem ipsum dolor sit amet</string>
+    <string name="title_movie">Movie Title</string>
+    <string name="category_movie">Movie</string>
+    <string name="no_data">No Data</string>
+    <string name="search">Search</string>
+</resources>

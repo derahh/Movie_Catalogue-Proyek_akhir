@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film Favorit</string>
+    <string name="lorem">lorem ipsum dolor sit amet</string>
+    <string name="title_movie">Judul Favorite</string>
+    <string name="category_movie">Film</string>
+    <string name="no_data">Data Tidak Ada</string>
+    <string name="search">Cari</string>
+</resources>
