@@ -6,4 +6,13 @@
     <string name="category_movie">Film</string>
     <string name="no_data">Data Tidak Ada</string>
     <string name="search">Cari</string>
+    <string name="change_language_settings">Change Language Setting</string>
+    <string name="year">Tahun</string>
+    <string name="user_score">Skor Pengguna</string>
+    <string name="overview">Ikhtisar</string>
+
+    <string-array name="data_title_tab">
+        <item>Film</item>
+        <item>Acara TV</item>
+    </string-array>
 </resources>

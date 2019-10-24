@@ -1,4 +1,4 @@
-package id.co.derahh.moviecatalogue.fragment;
+package com.derahh.moviefavoritecatalogue.fragment;
 
 
 import android.content.Context;
@@ -20,17 +20,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.derahh.moviefavoritecatalogue.LoadMovieCallback;
+import com.derahh.moviefavoritecatalogue.R;
+import com.derahh.moviefavoritecatalogue.adapter.MovieFavoriteAdapter;
+import com.derahh.moviefavoritecatalogue.model.Movie;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import id.co.derahh.moviecatalogue.LoadMovieCallback;
-import id.co.derahh.moviecatalogue.Model.Movie;
-import id.co.derahh.moviecatalogue.R;
-import id.co.derahh.moviecatalogue.adapter.MovieFavoriteAdapter;
-import id.co.derahh.moviecatalogue.database.MovieHelper;
-
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.CONTENT_URI;
-import static id.co.derahh.moviecatalogue.helper.MappingHelper.mapCursorMovieToArrayList;
+import static com.derahh.moviefavoritecatalogue.database.DatabaseContract.MovieColumns.CONTENT_URI;
+import static com.derahh.moviefavoritecatalogue.helper.MappingHelper.mapCursorMovieToArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +45,6 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
     TextView tvNoData;
 
     private MovieFavoriteAdapter adapter;
-    private MovieHelper movieHelper;
 
 
     public MovieFavoriteFragment() {
@@ -66,9 +64,6 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-
-        movieHelper = MovieHelper.getInstance(getContext());
-        movieHelper.open();
 
         adapter = new MovieFavoriteAdapter(getContext());
         recyclerView.setAdapter(adapter);
@@ -90,18 +85,6 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
         }
 
         return view;
-    }
-
-    @Override
-    public void preExecute() {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.VISIBLE);
-                tvNoData.setVisibility(View.GONE);
-                Log.d(TAG, "run: PreExecute");
-            }
-        });
     }
 
     @Override
@@ -130,12 +113,6 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        movieHelper.close();
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(EXTRA_STATE, adapter.getListData());
@@ -143,25 +120,18 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
 
     private static class LoadMovieAsync extends AsyncTask<Void, Void, Cursor> {
 
-        private final WeakReference<Context> weakContent;
+        private final WeakReference<Context> weakContext;
         private final WeakReference<LoadMovieCallback> weakCallback;
 
         private LoadMovieAsync(Context context, LoadMovieCallback callback) {
-            weakContent = new WeakReference<>(context);
+            weakContext = new WeakReference<>(context);
             weakCallback = new WeakReference<>(callback);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            weakCallback.get().preExecute();
-            Log.d(TAG, "onPreExecute: ");
         }
 
         @Override
         protected Cursor doInBackground(Void... voids) {
             Log.d(TAG, "doInBackground: ");
-            return weakContent.get().getContentResolver().query(CONTENT_URI, null, null, null, null);
+            return weakContext.get().getContentResolver().query(CONTENT_URI, null, null, null, null);
         }
 
         @Override

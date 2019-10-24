@@ -1,39 +1,13 @@
 package com.derahh.moviefavoritecatalogue.model;
 
-import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.derahh.moviefavoritecatalogue.database.DatabaseContract;
-
-import static android.provider.BaseColumns._ID;
-import static com.derahh.moviefavoritecatalogue.database.DatabaseContract.getColumnDouble;
-import static com.derahh.moviefavoritecatalogue.database.DatabaseContract.getColumnInt;
-import static com.derahh.moviefavoritecatalogue.database.DatabaseContract.getColumnString;
 
 public class Movie implements Parcelable {
 
     private int id;
     private double userScore;
     private String title, year, description, photo;
-
-    public Movie(int id, double userScore, String title, String year, String description, String photo) {
-        this.id = id;
-        this.userScore = userScore;
-        this.title = title;
-        this.year = year;
-        this.description = description;
-        this.photo = photo;
-    }
-
-    public Movie(Cursor cursor){
-        this.id = getColumnInt(cursor, _ID);
-        this.userScore = getColumnDouble(cursor, DatabaseContract.MovieColumns.userScore);
-        this.title = getColumnString(cursor, DatabaseContract.MovieColumns.title);
-        this.year = getColumnString(cursor, DatabaseContract.MovieColumns.year);
-        this.description = getColumnString(cursor, DatabaseContract.MovieColumns.description);
-        this.photo = getColumnString(cursor, DatabaseContract.MovieColumns.photo);
-    }
 
     public int getId() {
         return id;

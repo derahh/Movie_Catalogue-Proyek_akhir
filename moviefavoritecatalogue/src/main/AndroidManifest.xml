@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.derahh.moviefavoritecatalogue">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="id.co.derahh.moviecatalogue.provider.FavoriteProvider.READ_DATABASE"/>
-    <uses-permission android:name="id.co.derahh.moviecatalogue.provider.FavoriteProvider.WRITE_DATABASE"/>
+    <uses-permission android:name="id.co.derahh.moviecatalogue.READ_DATABASE"/>
+    <uses-permission android:name="id.co.derahh.moviecatalogue.WRITE_DATABASE"/>
 
     <application
         android:allowBackup="true"

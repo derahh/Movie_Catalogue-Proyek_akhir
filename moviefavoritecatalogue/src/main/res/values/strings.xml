@@ -5,4 +5,13 @@
     <string name="category_movie">Movie</string>
     <string name="no_data">No Data</string>
     <string name="search">Search</string>
+    <string name="change_language_settings">Change Language Setting</string>
+    <string name="year">Year</string>
+    <string name="user_score">User Score</string>
+    <string name="overview">Overview</string>
+
+    <string-array name="data_title_tab">
+        <item>Movies</item>
+        <item>TV Shows</item>
+    </string-array>
 </resources>

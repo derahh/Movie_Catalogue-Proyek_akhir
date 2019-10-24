@@ -3,4 +3,10 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!--user score < 7.0%-->
+    <color name="user_score1">#F5A623</color>
+
+    <!--userscore >= 7.0%-->
+    <color name="user_score2">#04B4B3</color>
 </resources>
