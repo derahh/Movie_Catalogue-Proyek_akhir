@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -19,8 +20,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-
-import java.util.Objects;
 
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.Model.TvShow;
@@ -48,6 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     private MovieHelper movieHelper;
     private TvShow tvShow;
     private TvShowHelper tvShowHelper;
+    private Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,12 @@ public class DetailActivity extends AppCompatActivity {
 
         if (movie != null) {
             showMovieData();
-        } else {
+        } else if (tvShow != null) {
             showTvShowData();
         }
 
-        Uri uri = getIntent().getData();
+        uri = getIntent().getData();
+        Toast.makeText(this, "uri "+uri, Toast.LENGTH_SHORT).show();
         if (uri != null) {
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
             Log.d("id: ", "Id: " + getIntent().getData());
@@ -80,7 +81,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (cursor.moveToFirst()) {
                     if (movie != null) {
                         movie = new Movie(cursor);
-                    } else {
+                    } else if (tvShow != null) {
                         tvShow = new TvShow(cursor);
                     }
                 }
@@ -163,7 +164,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
                     movieHelper.open();
-                    getContentResolver().delete(Objects.requireNonNull(getIntent().getData()), null, null);
+                    getContentResolver().delete(uri, null, null);
                     movieHelper.close();
                     setFavorite();
                 } else {
@@ -172,11 +173,11 @@ public class DetailActivity extends AppCompatActivity {
                     setFavorite();
                 }
                 updateWidgetMovieFavorite();
-            } else {
+            } else if (tvShow != null) {
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
                     tvShowHelper.open();
-                    getContentResolver().delete(Objects.requireNonNull(getIntent().getData()), null, null);
+                    getContentResolver().delete(uri, null, null);
                     tvShowHelper.close();
                     setFavorite();
                 } else {
@@ -211,7 +212,7 @@ public class DetailActivity extends AppCompatActivity {
         contentValues.put(_ID, tvShow.getId());
         contentValues.put(TvShowColumns.title, tvShow.getTitle());
         contentValues.put(TvShowColumns.description, tvShow.getDescription());
-        contentValues.put(TvShowColumns.description, tvShow.getDescription());
+        contentValues.put(TvShowColumns.year, tvShow.getYear());
         contentValues.put(TvShowColumns.photo, tvShow.getPhoto());
         contentValues.put(TvShowColumns.userScore, tvShow.getUserScore());
         getContentResolver().insert(TvShowColumns.CONTENT_URI, contentValues);
@@ -232,7 +233,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onStart();
         if (movie != null) {
             isAlreadyLoved = movieHelper.isAlreadyLoved(movie.getId());
-        } else {
+        } else if (tvShow != null) {
             isAlreadyLoved = tvShowHelper.isAlreadyLoved(tvShow.getId());
         }
         Log.d("IsAlreadyLove", String.valueOf(isAlreadyLoved));

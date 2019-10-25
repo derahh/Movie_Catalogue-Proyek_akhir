@@ -2,13 +2,15 @@ package id.co.derahh.moviecatalogue.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
+
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.TvShowColumns.CONTENT_URI;
 
 public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowViewHolder> {
 
@@ -55,7 +59,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
             @Override
             public void onClick(View v) {
                 tvShow = getListData().get(i);
-                showSelectedTvShow(tvShow);
+                showSelectedTvShow(tvShow, i);
             }
         });
     }
@@ -63,11 +67,6 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
     @Override
     public int getItemCount() {
         return getListData().size();
-    }
-
-    public void filterList(ArrayList<TvShow> filterdNames) {
-        this.listData = filterdNames;
-        notifyDataSetChanged();
     }
 
     class TvShowViewHolder extends RecyclerView.ViewHolder {
@@ -83,8 +82,10 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.TvShowView
         }
     }
 
-    private void showSelectedTvShow(TvShow tvShow){
+    private void showSelectedTvShow(TvShow tvShow, int position){
         Intent detailTvShowIntent = new Intent(mContext, DetailActivity.class);
+        Uri uri = Uri.parse(CONTENT_URI + "/" + getListData().get(position).getId());
+        detailTvShowIntent.setData(uri);
         detailTvShowIntent.putExtra(DetailActivity.EXTRA_TV_SHOW, tvShow);
         mContext.startActivity(detailTvShowIntent);
     }

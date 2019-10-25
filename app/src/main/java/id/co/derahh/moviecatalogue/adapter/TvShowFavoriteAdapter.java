@@ -2,13 +2,15 @@ package id.co.derahh.moviecatalogue.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
+
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.TvShowColumns.CONTENT_URI;
 
 public class TvShowFavoriteAdapter extends RecyclerView.Adapter<TvShowFavoriteAdapter.ViewHolder> {
 
@@ -55,7 +59,7 @@ public class TvShowFavoriteAdapter extends RecyclerView.Adapter<TvShowFavoriteAd
             @Override
             public void onClick(View v) {
                 tvShow = getListData().get(i);
-                showSelectedTvShow(tvShow);
+                showSelectedTvShow(tvShow, i);
             }
         });
     }
@@ -78,8 +82,10 @@ public class TvShowFavoriteAdapter extends RecyclerView.Adapter<TvShowFavoriteAd
         }
     }
 
-    private void showSelectedTvShow(TvShow tvShow){
+    private void showSelectedTvShow(TvShow tvShow, int position){
         Intent detailMovieIntent = new Intent(mContext, DetailActivity.class);
+        Uri uri = Uri.parse(CONTENT_URI + "/" + getListData().get(position).getId());
+        detailMovieIntent.setData(uri);
         detailMovieIntent.putExtra(DetailActivity.EXTRA_TV_SHOW, tvShow);
         mContext.startActivity(detailMovieIntent);
     }

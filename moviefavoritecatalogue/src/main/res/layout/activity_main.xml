@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/CategoryTab"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_favorite"

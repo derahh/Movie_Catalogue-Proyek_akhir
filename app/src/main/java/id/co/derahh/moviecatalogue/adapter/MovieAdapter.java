@@ -2,13 +2,15 @@ package id.co.derahh.moviecatalogue.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -17,6 +19,8 @@ import java.util.ArrayList;
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.DetailActivity;
+
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.CONTENT_URI;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
@@ -56,7 +60,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 movie = getListData().get(i);
-                showSelectedMovie(movie);
+                showSelectedMovie(movie, i);
             }
         });
     }
@@ -64,11 +68,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public int getItemCount() {
         return getListData().size();
-    }
-
-    public void filterList(ArrayList<Movie> filterdNames) {
-        this.listData = filterdNames;
-        notifyDataSetChanged();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,8 +83,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
     }
 
-    private void showSelectedMovie(Movie movie){
+    private void showSelectedMovie(Movie movie, int position){
         Intent detailMovieIntent = new Intent(mContext, DetailActivity.class);
+        Uri uri = Uri.parse(CONTENT_URI + "/" + getListData().get(position).getId());
+        detailMovieIntent.setData(uri);
         detailMovieIntent.putExtra(DetailActivity.EXTRA_MOVIE, movie);
         mContext.startActivity(detailMovieIntent);
     }

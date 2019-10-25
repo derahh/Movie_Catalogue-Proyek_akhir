@@ -90,28 +90,32 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
     public RemoteViews getViewAt(int i) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
 
-        String photo = mWidgetItems.get(i).getPhoto();
-        String title = mWidgetItems.get(i).getTitle();
-        Log.i(TAG, "loadWidgetData: " + photo);
-        try {
-            Bitmap preview = Glide.with(mContext)
-                    .asBitmap()
-                    .load(photo)
-                    .apply(new RequestOptions().fitCenter())
-                    .submit()
-                    .get();
-            rv.setImageViewBitmap(R.id.imageView, preview);
-        } catch (InterruptedException | ExecutionException e) {
-            Log.d(TAG, "error");
+        if (mWidgetItems.size() != 0) {
+            String photo = mWidgetItems.get(i).getPhoto();
+            String title = mWidgetItems.get(i).getTitle();
+            Log.i(TAG, "loadWidgetData: " + photo);
+            try {
+                Bitmap preview = Glide.with(mContext)
+                        .asBitmap()
+                        .load(photo)
+                        .apply(new RequestOptions().fitCenter())
+                        .submit()
+                        .get();
+                rv.setImageViewBitmap(R.id.imageView, preview);
+            } catch (InterruptedException | ExecutionException e) {
+                Log.d(TAG, "error");
+            }
+
+            Bundle extras = new Bundle();
+            extras.putString(ImagesBannerWidget.EXTRA_ITEM, title);
+            Intent fillInIntent = new Intent();
+            fillInIntent.putExtras(extras);
+
+
+            rv.setOnClickFillInIntent(R.id.imageView, fillInIntent);
         }
-
-        Bundle extras = new Bundle();
-        extras.putString(ImagesBannerWidget.EXTRA_ITEM, title);
-        Intent fillInIntent = new Intent();
-        fillInIntent.putExtras(extras);
-
-        rv.setOnClickFillInIntent(R.id.imageView, fillInIntent);
         return rv;
+
     }
 
     @Override
