@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import java.util.Objects;
-
 import id.co.derahh.moviecatalogue.R;
 
 /**
@@ -59,13 +57,12 @@ public class ImagesBannerWidget extends AppWidgetProvider {
             if (intent.getAction().equals(TOAST_ACTION)) {
                 String viewIndex = intent.getStringExtra(EXTRA_ITEM);
                 Toast.makeText(context, "Touched view " + viewIndex, Toast.LENGTH_SHORT).show();
-            }
-        }
-        if (Objects.equals(intent.getAction(), UPDATE_WIDGET)){
-            AppWidgetManager gm = AppWidgetManager.getInstance(context);
-            int[] ids = gm.getAppWidgetIds(new ComponentName(context, ImagesBannerWidget.class));
+            } else if (intent.getAction().equals(UPDATE_WIDGET)){
+                AppWidgetManager gm = AppWidgetManager.getInstance(context);
+                int[] ids = gm.getAppWidgetIds(new ComponentName(context, ImagesBannerWidget.class));
 
-            gm.notifyAppWidgetViewDataChanged(ids ,R.id.stack_view);
+                gm.notifyAppWidgetViewDataChanged(ids ,R.id.stack_view);
+            }
         }
     }
 

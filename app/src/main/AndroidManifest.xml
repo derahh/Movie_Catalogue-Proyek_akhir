@@ -20,9 +20,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.UserPreferenceActivity"
+        <activity android:name=".activity.SearchActivity"
             android:parentActivityName=".activity.MainActivity">
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />>
+        </activity>
+        <activity
+            android:name=".activity.UserPreferenceActivity"
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -51,7 +57,6 @@
         <activity
             android:name=".activity.DetailActivity"
             android:parentActivityName=".activity.MainActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
@@ -60,22 +65,23 @@
         <service
             android:name=".widget.StackWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
-        
+
         <provider
-            android:authorities="id.co.derahh.moviecatalogue.database"
             android:name=".provider.FavoriteProvider"
+            android:authorities="id.co.derahh.moviecatalogue.database"
             android:enabled="true"
             android:exported="true"
             android:readPermission="id.co.derahh.moviecatalogue.READ_DATABASE"
-            android:writePermission="id.co.derahh.moviecatalogue.WRITE_DATABASE"/>
+            android:writePermission="id.co.derahh.moviecatalogue.WRITE_DATABASE" />
 
-        <receiver android:name=".receiver.DailyReminderReceiver"
+        <receiver
+            android:name=".receiver.DailyReminderReceiver"
             android:enabled="true"
-            android:exported="true"/>
-
-        <receiver android:name=".receiver.ReleaseTodayReminderReceiver"
+            android:exported="true" />
+        <receiver
+            android:name=".receiver.ReleaseTodayReminderReceiver"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

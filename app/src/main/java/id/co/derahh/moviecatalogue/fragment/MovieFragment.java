@@ -2,7 +2,9 @@ package id.co.derahh.moviecatalogue.fragment;
 
 
 import android.app.SearchManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,9 +31,9 @@ import java.util.Objects;
 
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.R;
+import id.co.derahh.moviecatalogue.activity.SearchActivity;
 import id.co.derahh.moviecatalogue.adapter.MovieAdapter;
 import id.co.derahh.moviecatalogue.viewModel.MovieViewModel;
-import id.co.derahh.moviecatalogue.viewModel.SearchViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +46,6 @@ public class MovieFragment extends Fragment {
     ProgressBar progressBar;
     TextView tvNoData;
     MovieAdapter adapter;
-    SearchViewModel searchViewModel;
 
 
     public MovieFragment() {
@@ -63,9 +64,6 @@ public class MovieFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list_main);
         progressBar = view.findViewById(R.id.progress_bar);
         tvNoData = view.findViewById(R.id.tv_no_data);
-
-//        searchViewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
-//        searchViewModel.getSearchMovie().observe(this, getSearchMovie);
 
         viewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
         viewModel.getMovie().observe(this, getMovie);
@@ -90,21 +88,22 @@ public class MovieFragment extends Fragment {
         SearchManager searchManager = (SearchManager) Objects.requireNonNull(getActivity()).getSystemService(Context.SEARCH_SERVICE);
         if (searchManager != null) {
             SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(searchView.getContext(), SearchActivity.class)));
             searchView.setQueryHint(getResources().getString(R.string.search_movie));
             searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    recyclerView.setVisibility(View.GONE);
-                    searchMovies(s);
+                    Intent searchMovieIntent = new Intent(getActivity(), SearchActivity.class);
+                    searchMovieIntent.putExtra(SearchActivity.EXTRA_QUERY, s);
+                    searchMovieIntent.putExtra(SearchActivity.EXTRA_TYPE, "movie");
+                    startActivity(searchMovieIntent);
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String s) {
-                    recyclerView.setVisibility(View.GONE);
-                    searchMovies(s);
-                    return true;
+                    return false;
                 }
             });
         }
@@ -134,23 +133,4 @@ public class MovieFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
     }
-
-    private void searchMovies(String editable) {
-        searchViewModel.searchMovie(editable);
-        tvNoData.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private Observer<ArrayList<Movie>> getSearchMovie = new Observer<ArrayList<Movie>>() {
-        @Override
-        public void onChanged(@Nullable ArrayList<Movie> movies) {
-            if (movies != null) {
-                adapter.setListData(movies);
-                progressBar.setVisibility(View.GONE);
-            }else {
-                tvNoData.setVisibility(View.VISIBLE);
-            }
-            adapter.filterList(movies);
-        }
-    };
 }

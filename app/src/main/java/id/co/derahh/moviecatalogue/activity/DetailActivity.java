@@ -1,6 +1,7 @@
 package id.co.derahh.moviecatalogue.activity;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -19,11 +20,14 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.Objects;
+
 import id.co.derahh.moviecatalogue.Model.Movie;
 import id.co.derahh.moviecatalogue.Model.TvShow;
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.database.MovieHelper;
 import id.co.derahh.moviecatalogue.database.TvShowHelper;
+import id.co.derahh.moviecatalogue.widget.ImagesBannerWidget;
 
 import static android.provider.BaseColumns._ID;
 import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns;
@@ -64,7 +68,7 @@ public class DetailActivity extends AppCompatActivity {
 
         if (movie != null) {
             showMovieData();
-        } else if (tvShow != null) {
+        } else {
             showTvShowData();
         }
 
@@ -76,7 +80,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (cursor.moveToFirst()) {
                     if (movie != null) {
                         movie = new Movie(cursor);
-                    } else if (tvShow != null) {
+                    } else {
                         tvShow = new TvShow(cursor);
                     }
                 }
@@ -159,7 +163,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
                     movieHelper.open();
-                    getContentResolver().delete(getIntent().getData(), null, null);
+                    getContentResolver().delete(Objects.requireNonNull(getIntent().getData()), null, null);
                     movieHelper.close();
                     setFavorite();
                 } else {
@@ -167,11 +171,12 @@ public class DetailActivity extends AppCompatActivity {
                     saveFavoriteMovie();
                     setFavorite();
                 }
-            } else if (tvShow != null){
+                updateWidgetMovieFavorite();
+            } else {
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
                     tvShowHelper.open();
-                    getContentResolver().delete(getIntent().getData(), null, null);
+                    getContentResolver().delete(Objects.requireNonNull(getIntent().getData()), null, null);
                     tvShowHelper.close();
                     setFavorite();
                 } else {
@@ -179,7 +184,9 @@ public class DetailActivity extends AppCompatActivity {
                     saveTvShowFavorite();
                     setFavorite();
                 }
+                updateWidgetMovieFavorite();
             }
+            updateWidgetMovieFavorite();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -225,9 +232,15 @@ public class DetailActivity extends AppCompatActivity {
         super.onStart();
         if (movie != null) {
             isAlreadyLoved = movieHelper.isAlreadyLoved(movie.getId());
-        } else if (tvShow != null){
+        } else {
             isAlreadyLoved = tvShowHelper.isAlreadyLoved(tvShow.getId());
         }
         Log.d("IsAlreadyLove", String.valueOf(isAlreadyLoved));
+    }
+
+    private void updateWidgetMovieFavorite() {
+        Intent updateWidget = new Intent(this, ImagesBannerWidget.class);
+        updateWidget.setAction(ImagesBannerWidget.UPDATE_WIDGET);
+        sendBroadcast(updateWidget);
     }
 }

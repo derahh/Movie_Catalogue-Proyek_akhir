@@ -36,6 +36,7 @@
     <string name="search_movie">Cari Film</string>
     <string name="search_tv_show">Cari Acara TV</string>
     <string name="has_release_today"> telah dirilis hari ini!</string>
+    <string name="search_result">Hasil Cari</string>
 
     <string-array name="data_title_tab">
         <item>Film</item>
