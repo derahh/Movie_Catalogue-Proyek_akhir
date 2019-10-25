@@ -1,14 +1,18 @@
 package id.co.derahh.moviecatalogue.activity;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
@@ -21,7 +25,11 @@ import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.database.MovieHelper;
 import id.co.derahh.moviecatalogue.database.TvShowHelper;
 
-public class DetailActivity extends AppCompatActivity{
+import static android.provider.BaseColumns._ID;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns;
+import static id.co.derahh.moviecatalogue.database.DatabaseContract.TvShowColumns;
+
+public class DetailActivity extends AppCompatActivity {
 
     TextView tvTitle, tvDescription, tvYear, tvUserScore;
     ImageView imgPhoto;
@@ -51,70 +59,86 @@ public class DetailActivity extends AppCompatActivity{
         movieHelper = MovieHelper.getInstance(getApplicationContext());
         tvShowHelper = TvShowHelper.getInstance(getApplicationContext());
 
-        showDetailData();
-    }
-
-    private void showDetailData(){
         movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
         tvShow = getIntent().getParcelableExtra(EXTRA_TV_SHOW);
 
         if (movie != null) {
+            showMovieData();
+        } else if (tvShow != null) {
+            showTvShowData();
+        }
 
-            tvTitle.setText(movie.getTitle());
-            tvDescription.setText(movie.getDescription());
-            tvYear.setText(movie.getYear());
-            tvUserScore.setText(String.format("%s", movie.getUserScore()));
-
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_broken_image_black_24dp)
-                    .error(R.drawable.ic_broken_image_black_24dp)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .priority(Priority.HIGH);
-
-            Glide.with(this).load(movie.getPhoto()).apply(options).into(imgPhoto);
-
-            GradientDrawable gradientDrawable = (GradientDrawable) tvUserScore.getBackground();
-            int userScoreColor = getUserScoreColor(movie.getUserScore());
-            gradientDrawable.setColor(userScoreColor);
-
-            if (getSupportActionBar() != null){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Detail "+movie.getTitle());
-            }
-
-        }else {
-
-            tvTitle.setText(tvShow.getTitle());
-            tvDescription.setText(tvShow.getDescription());
-            tvYear.setText(tvShow.getYear());
-            tvUserScore.setText(String.format("%s", tvShow.getUserScore()));
-
-            RequestOptions options = new RequestOptions()
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_broken_image_black_24dp)
-                    .error(R.drawable.ic_broken_image_black_24dp)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .priority(Priority.HIGH);
-
-            Glide.with(this).load(tvShow.getPhoto()).apply(options).into(imgPhoto);
-
-            GradientDrawable gradientDrawable = (GradientDrawable) tvUserScore.getBackground();
-            int userScoreColor = getUserScoreColor(tvShow.getUserScore());
-            gradientDrawable.setColor(userScoreColor);
-
-            if (getSupportActionBar() != null){
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Detail "+tvShow.getTitle());
+        Uri uri = getIntent().getData();
+        if (uri != null) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            Log.d("id: ", "Id: " + getIntent().getData());
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    if (movie != null) {
+                        movie = new Movie(cursor);
+                    } else if (tvShow != null) {
+                        tvShow = new TvShow(cursor);
+                    }
+                }
+                cursor.close();
             }
         }
     }
 
-    private int getUserScoreColor(double userScore){
+
+    private void showMovieData(){
+        tvTitle.setText(movie.getTitle());
+        tvDescription.setText(movie.getDescription());
+        tvYear.setText(movie.getYear());
+        tvUserScore.setText(String.format("%s", movie.getUserScore()));
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.ic_broken_image_black_24dp)
+                .error(R.drawable.ic_broken_image_black_24dp)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH);
+
+        Glide.with(this).load(movie.getPhoto()).apply(options).into(imgPhoto);
+
+        GradientDrawable gradientDrawable = (GradientDrawable) tvUserScore.getBackground();
+        int userScoreColor = getUserScoreColor(movie.getUserScore());
+        gradientDrawable.setColor(userScoreColor);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Detail " + movie.getTitle());
+        }
+    }
+
+    private void showTvShowData(){
+        tvTitle.setText(tvShow.getTitle());
+        tvDescription.setText(tvShow.getDescription());
+        tvYear.setText(tvShow.getYear());
+        tvUserScore.setText(String.format("%s", tvShow.getUserScore()));
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.ic_broken_image_black_24dp)
+                .error(R.drawable.ic_broken_image_black_24dp)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH);
+
+        Glide.with(this).load(tvShow.getPhoto()).apply(options).into(imgPhoto);
+
+        GradientDrawable gradientDrawable = (GradientDrawable) tvUserScore.getBackground();
+        int userScoreColor = getUserScoreColor(tvShow.getUserScore());
+        gradientDrawable.setColor(userScoreColor);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Detail " + tvShow.getTitle());
+        }
+    }
+
+    private int getUserScoreColor(double userScore) {
         int userSCoreColorResourceId;
-        if (userScore < 7.0){
+        if (userScore < 7.0) {
             userSCoreColorResourceId = R.color.user_score1;
-        }else {
+        } else {
             userSCoreColorResourceId = R.color.user_score2;
         }
         return ContextCompat.getColor(this, userSCoreColorResourceId);
@@ -132,33 +156,59 @@ public class DetailActivity extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_favorite) {
             if (movie != null) {
-                movieHelper.open();
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
-                    movieHelper.deleteFavoriteMovie(movie.getId());
+                    movieHelper.open();
+                    getContentResolver().delete(getIntent().getData(), null, null);
+                    movieHelper.close();
                     setFavorite();
                 } else {
                     isAlreadyLoved = true;
-                    movieHelper.insertFavoriteMovie(movie);
+                    saveFavoriteMovie();
                     setFavorite();
                 }
-                movieHelper.close();
-            } else {
-                tvShowHelper.open();
+            } else if (tvShow != null){
                 if (isAlreadyLoved) {
                     isAlreadyLoved = false;
-                    tvShowHelper.deleteFavoriteMovie(tvShow.getId());
+                    tvShowHelper.open();
+                    getContentResolver().delete(getIntent().getData(), null, null);
+                    tvShowHelper.close();
                     setFavorite();
                 } else {
                     isAlreadyLoved = true;
-                    tvShowHelper.insertFavoriteMovie(tvShow);
+                    saveTvShowFavorite();
                     setFavorite();
                 }
-                tvShowHelper.close();
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveFavoriteMovie(){
+        movieHelper.open();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(_ID, movie.getId());
+        contentValues.put(MovieColumns.title, movie.getTitle());
+        contentValues.put(MovieColumns.description, movie.getDescription());
+        contentValues.put(MovieColumns.year, movie.getYear());
+        contentValues.put(MovieColumns.photo, movie.getPhoto());
+        contentValues.put(MovieColumns.userScore, movie.getUserScore());
+        getContentResolver().insert(MovieColumns.CONTENT_URI, contentValues);
+        movieHelper.close();
+    }
+
+    private void saveTvShowFavorite(){
+        tvShowHelper.open();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(_ID, tvShow.getId());
+        contentValues.put(TvShowColumns.title, tvShow.getTitle());
+        contentValues.put(TvShowColumns.description, tvShow.getDescription());
+        contentValues.put(TvShowColumns.description, tvShow.getDescription());
+        contentValues.put(TvShowColumns.photo, tvShow.getPhoto());
+        contentValues.put(TvShowColumns.userScore, tvShow.getUserScore());
+        getContentResolver().insert(TvShowColumns.CONTENT_URI, contentValues);
+        tvShowHelper.close();
     }
 
     private void setFavorite() {
@@ -175,7 +225,7 @@ public class DetailActivity extends AppCompatActivity{
         super.onStart();
         if (movie != null) {
             isAlreadyLoved = movieHelper.isAlreadyLoved(movie.getId());
-        } else {
+        } else if (tvShow != null){
             isAlreadyLoved = tvShowHelper.isAlreadyLoved(tvShow.getId());
         }
         Log.d("IsAlreadyLove", String.valueOf(isAlreadyLoved));

@@ -73,7 +73,7 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
         handlerThread.start();
         Handler handler = new Handler(handlerThread.getLooper());
 
-        MovieFavoriteFragment.DataObserver myObserver = new MovieFavoriteFragment.DataObserver(handler, getContext());
+        DataObserver myObserver = new DataObserver(handler, getContext());
         getActivity().getContentResolver().registerContentObserver(CONTENT_URI, true, myObserver);
 
         if (savedInstanceState == null) {
@@ -86,6 +86,12 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
         }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.getListData());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -110,12 +116,6 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
             adapter.setListData(new ArrayList<TvShow>());
             Log.d(TAG, " MOVIE NULL");
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(EXTRA_STATE, adapter.getListData());
     }
 
     private static class LoadMovieAsync extends AsyncTask<Void, Void, Cursor> {

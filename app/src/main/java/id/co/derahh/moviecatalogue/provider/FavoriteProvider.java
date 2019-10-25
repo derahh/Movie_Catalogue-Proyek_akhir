@@ -9,6 +9,8 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
+
 import id.co.derahh.moviecatalogue.database.DatabaseContract;
 import id.co.derahh.moviecatalogue.database.MovieHelper;
 import id.co.derahh.moviecatalogue.database.TvShowHelper;
@@ -87,12 +89,12 @@ public class FavoriteProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
                 added = movieHelper.insertProvider(values);
-                getContext().getContentResolver().notifyChange(DatabaseContract.MovieColumns.CONTENT_URI, new MovieFavoriteFragment.DataObserver(new Handler(), getContext()));
+                Objects.requireNonNull(getContext()).getContentResolver().notifyChange(DatabaseContract.MovieColumns.CONTENT_URI, new MovieFavoriteFragment.DataObserver(new Handler(), getContext()));
                 favoriteUri = Uri.parse(DatabaseContract.MovieColumns.CONTENT_URI + "/" + added);
                 break;
             case TV_SHOW:
                 added = tvShowHelper.insertProvider(values);
-                getContext().getContentResolver().notifyChange(DatabaseContract.TvShowColumns.CONTENT_URI, new TvShowFavoriteFragment.DataObserver(new Handler(), getContext()));
+                Objects.requireNonNull(getContext()).getContentResolver().notifyChange(DatabaseContract.TvShowColumns.CONTENT_URI, new TvShowFavoriteFragment.DataObserver(new Handler(), getContext()));
                 favoriteUri = Uri.parse(DatabaseContract.TvShowColumns.CONTENT_URI + "/" + added);
                 break;
             default:
@@ -111,11 +113,11 @@ public class FavoriteProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case MOVIE_ID:
                 deleted = movieHelper.deleteProvider(uri.getLastPathSegment());
-                getContext().getContentResolver().notifyChange(DatabaseContract.MovieColumns.CONTENT_URI, new MovieFavoriteFragment.DataObserver(new Handler(), getContext()));
+                Objects.requireNonNull(getContext()).getContentResolver().notifyChange(DatabaseContract.MovieColumns.CONTENT_URI, new MovieFavoriteFragment.DataObserver(new Handler(), getContext()));
                 break;
             case TV_SHOW_ID:
                 deleted = tvShowHelper.deleteProvider(uri.getLastPathSegment());
-                getContext().getContentResolver().notifyChange(DatabaseContract.TvShowColumns.CONTENT_URI, new TvShowFavoriteFragment.DataObserver(new Handler(), getContext()));
+                Objects.requireNonNull(getContext()).getContentResolver().notifyChange(DatabaseContract.TvShowColumns.CONTENT_URI, new TvShowFavoriteFragment.DataObserver(new Handler(), getContext()));
                 break;
             default:
                 deleted = 0;

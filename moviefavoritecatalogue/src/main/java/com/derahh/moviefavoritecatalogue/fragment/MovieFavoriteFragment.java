@@ -88,6 +88,12 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.getListData());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void postExecute(Cursor cursor) {
         progressBar.setVisibility(View.GONE);
         ArrayList<Movie> movies = mapCursorMovieToArrayList(cursor);
@@ -110,12 +116,6 @@ public class MovieFavoriteFragment extends Fragment implements LoadMovieCallback
             Log.d(TAG, " MOVIE NULL");
         }
         Log.d(TAG, "postExecute");
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(EXTRA_STATE, adapter.getListData());
     }
 
     private static class LoadMovieAsync extends AsyncTask<Void, Void, Cursor> {
