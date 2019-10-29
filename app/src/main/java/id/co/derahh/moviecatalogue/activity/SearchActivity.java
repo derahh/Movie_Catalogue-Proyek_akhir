@@ -26,7 +26,6 @@ public class SearchActivity extends AppCompatActivity {
     public static final String EXTRA_QUERY = "extra_query";
     public static final String EXTRA_TYPE = "extra_type";
 
-    private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView tvNoData;
 
@@ -37,7 +36,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        recyclerView = findViewById(R.id.list_main);
         progressBar = findViewById(R.id.progress_bar);
         tvNoData = findViewById(R.id.tv_no_data);
 

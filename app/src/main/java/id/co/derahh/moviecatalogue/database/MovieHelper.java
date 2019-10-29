@@ -7,16 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
-
-import id.co.derahh.moviecatalogue.Model.Movie;
-
 import static android.provider.BaseColumns._ID;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.description;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.photo;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.title;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.userScore;
-import static id.co.derahh.moviecatalogue.database.DatabaseContract.MovieColumns.year;
 import static id.co.derahh.moviecatalogue.database.DatabaseContract.TABLE_MOVIE;
 
 public class MovieHelper {
@@ -52,49 +43,6 @@ public class MovieHelper {
             database.close();
     }
 
-    public ArrayList<Movie> getAllFavoriteMovie() {
-        ArrayList<Movie> arrayList = new ArrayList<>();
-        Cursor cursor = database.query(DATABASE_TABLE,
-                null,
-                null,
-                null,
-                null,
-                null,
-                _ID + " ASC",
-                null);
-        cursor.moveToFirst();
-
-        Movie movie;
-        if (cursor.getCount() > 0) {
-            do {
-                movie = new Movie();
-                movie.setId(cursor.getInt(cursor.getColumnIndexOrThrow(_ID)));
-
-                movie.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(title)));
-                movie.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(description)));
-                movie.setYear(cursor.getString(cursor.getColumnIndexOrThrow(year)));
-                movie.setPhoto(cursor.getString(cursor.getColumnIndexOrThrow(photo)));
-                movie.setUserScore(cursor.getDouble(cursor.getColumnIndexOrThrow(userScore)));
-                arrayList.add(movie);
-                cursor.moveToNext();
-            } while (!cursor.isAfterLast());
-        }
-        cursor.close();
-        return arrayList;
-    }
-
-    public void insertFavoriteMovie(Movie movie) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(_ID, movie.getId());
-        contentValues.put(title, movie.getTitle());
-        contentValues.put(description, movie.getDescription());
-        contentValues.put(year, movie.getYear());
-        contentValues.put(photo, movie.getPhoto());
-        contentValues.put(userScore, movie.getUserScore());
-
-        database.insert(DATABASE_TABLE, null, contentValues);
-    }
-
     public boolean isAlreadyLoved(int movieId) {
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
 
@@ -111,10 +59,6 @@ public class MovieHelper {
         }
 
         return isFavorite;
-    }
-
-    public void deleteFavoriteMovie(int movieId) {
-        database.delete(DATABASE_TABLE, _ID + " = '" + movieId + "'", null);
     }
 
     public Cursor queryByIdProvider(String id) {

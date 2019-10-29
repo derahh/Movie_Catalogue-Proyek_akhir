@@ -28,7 +28,6 @@ public class DailyReminderReceiver extends BroadcastReceiver {
     private static final int NOTIF_ID_REPEATING = 101;
     private static final String CHANNEL_ID = "dailyalarm" ;
     public static CharSequence CHANNEL_NAME = "NOTIFICATION";
-    private final String TIME_FORMAT = "HH:mm";
 
     public DailyReminderReceiver() {
     }
@@ -71,6 +70,7 @@ public class DailyReminderReceiver extends BroadcastReceiver {
     }
 
     public void setRepeatingAlarm(Context context, String time) {
+        String TIME_FORMAT = "HH:mm";
         if (isTimeInvalid(time, TIME_FORMAT)) return;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

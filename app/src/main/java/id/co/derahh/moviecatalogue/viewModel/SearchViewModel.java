@@ -1,9 +1,10 @@
 package id.co.derahh.moviecatalogue.viewModel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -39,7 +40,7 @@ public class SearchViewModel extends ViewModel {
             language = "en-US";
         }
 
-        String url = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&language=" + currentLanguage + "&query=" + query;
+        String url = "https://api.themoviedb.org/3/search/movie?api_key=" + API_KEY + "&language=" + language + "&query=" + query;
         Log.e(TAG, "setMovie: " + url);
 
         client.get(url, new AsyncHttpResponseHandler() {
@@ -83,7 +84,7 @@ public class SearchViewModel extends ViewModel {
             language = "en-US";
         }
 
-        String url = " https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&language=" + currentLanguage + "&query=" + query;
+        String url = " https://api.themoviedb.org/3/search/tv?api_key=" + API_KEY + "&language=" + language + "&query=" + query;
         Log.e(TAG, "setTvShow: " + url);
 
         client.get(url, new AsyncHttpResponseHandler() {

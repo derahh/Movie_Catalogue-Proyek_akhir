@@ -11,9 +11,10 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -24,10 +25,8 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
@@ -42,15 +41,12 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
     private static final int NOTIF_ID_REPEATING = 102;
     private static final String CHANNEL_ID = "todayremainder" ;
     public static CharSequence CHANNEL_NAME = "NOTIFICATION";
-    private List<Movie> movieList = new ArrayList<>();
-    private final String TIME_FORMAT = "HH:mm";
 
     public ReleaseTodayReminderReceiver() {
     }
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        final String title = context.getString(R.string.release_today);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
@@ -124,6 +120,7 @@ public class ReleaseTodayReminderReceiver extends BroadcastReceiver {
     }
 
     public void setRepeatingAlarm(Context context, String time) {
+        String TIME_FORMAT = "HH:mm";
         if (isTimeInvalid(time, TIME_FORMAT)) return;
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

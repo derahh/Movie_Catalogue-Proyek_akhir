@@ -47,4 +47,5 @@
     <string name="search_tv_show">Search Tv Show</string>
     <string name="has_release_today"> has been release today!</string>
     <string name="search_result">Search Result</string>
+    <string name="todo">TODO</string>
 </resources>

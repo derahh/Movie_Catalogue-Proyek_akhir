@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -73,7 +72,6 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         uri = getIntent().getData();
-        Toast.makeText(this, "uri "+uri, Toast.LENGTH_SHORT).show();
         if (uri != null) {
             Cursor cursor = getContentResolver().query(uri, null, null, null, null);
             Log.d("id: ", "Id: " + getIntent().getData());

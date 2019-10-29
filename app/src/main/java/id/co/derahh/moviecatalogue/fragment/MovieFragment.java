@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,12 +43,11 @@ import id.co.derahh.moviecatalogue.viewModel.MovieViewModel;
  */
 public class MovieFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    LinearLayoutManager linearLayoutManager;
-    MovieViewModel viewModel;
-    ProgressBar progressBar;
-    TextView tvNoData;
-    MovieAdapter adapter;
+    private RecyclerView recyclerView;
+    private MovieViewModel viewModel;
+    private ProgressBar progressBar;
+    private TextView tvNoData;
+    private MovieAdapter adapter;
 
 
     public MovieFragment() {
@@ -56,10 +58,15 @@ public class MovieFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_list, container, false);
+        return inflater.inflate(R.layout.activity_list, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         final Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
 
         recyclerView = view.findViewById(R.id.list_main);
         progressBar = view.findViewById(R.id.progress_bar);
@@ -77,12 +84,10 @@ public class MovieFragment extends Fragment {
         loadData();
 
         addItem();
-
-        return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_search, menu);
 
         SearchManager searchManager = (SearchManager) Objects.requireNonNull(getActivity()).getSystemService(Context.SEARCH_SERVICE);
@@ -127,7 +132,7 @@ public class MovieFragment extends Fragment {
     }
 
     private void addItem(){
-        linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new MovieAdapter(getContext());
         adapter.notifyDataSetChanged();

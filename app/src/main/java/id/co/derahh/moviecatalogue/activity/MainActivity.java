@@ -1,11 +1,15 @@
 package id.co.derahh.moviecatalogue.activity;
 
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.jetbrains.annotations.NotNull;
 
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.fragment.FavoriteFragment;
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NotNull Bundle outState) {
         getSupportFragmentManager().putFragment(outState, KEY_FRAGMENT, fragment);
         super.onSaveInstanceState(outState);
     }

@@ -4,18 +4,26 @@ package id.co.derahh.moviecatalogue.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 import id.co.derahh.moviecatalogue.R;
 import id.co.derahh.moviecatalogue.activity.UserPreferenceActivity;
@@ -26,10 +34,6 @@ import id.co.derahh.moviecatalogue.adapter.CategoryAdapter;
  */
 public class FavoriteFragment extends Fragment {
 
-    ViewPager viewPager;
-    TabLayout tabLayout;
-    CategoryAdapter adapter;
-
     public FavoriteFragment() {
         // Required empty public constructor
     }
@@ -39,16 +43,20 @@ public class FavoriteFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+        return inflater.inflate(R.layout.fragment_favorite, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         final Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        viewPager = view.findViewById(R.id.view_pager);
-        adapter = new CategoryAdapter(getChildFragmentManager(), getContext());
+        ((AppCompatActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(toolbar);
+        ViewPager viewPager = view.findViewById(R.id.view_pager);
+        CategoryAdapter adapter = new CategoryAdapter(getChildFragmentManager(), Objects.requireNonNull(getContext()));
         viewPager.setAdapter(adapter);
 
-        tabLayout = view.findViewById(R.id.tabs);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -57,12 +65,10 @@ public class FavoriteFragment extends Fragment {
         }
 
         setHasOptionsMenu(true);
-
-        return view;
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NotNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main_menu, menu);
     }
 

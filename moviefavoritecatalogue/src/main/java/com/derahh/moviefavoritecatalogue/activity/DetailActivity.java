@@ -24,9 +24,6 @@ public class DetailActivity extends AppCompatActivity{
     public static final String EXTRA_MOVIE = "extra_movie";
     public static final String EXTRA_TV_SHOW = "extra_tv_show";
 
-    private Movie movie;
-    private TvShow tvShow;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +39,8 @@ public class DetailActivity extends AppCompatActivity{
     }
 
     private void showDetailData(){
-        movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
-        tvShow = getIntent().getParcelableExtra(EXTRA_TV_SHOW);
+        Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
+        TvShow tvShow = getIntent().getParcelableExtra(EXTRA_TV_SHOW);
 
         if (movie != null) {
 
@@ -67,10 +64,10 @@ public class DetailActivity extends AppCompatActivity{
 
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Detail "+movie.getTitle());
+                getSupportActionBar().setTitle("Detail "+ movie.getTitle());
             }
 
-        }else {
+        }else if (tvShow != null) {
 
             tvTitle.setText(tvShow.getTitle());
             tvDescription.setText(tvShow.getDescription());
@@ -92,7 +89,7 @@ public class DetailActivity extends AppCompatActivity{
 
             if (getSupportActionBar() != null){
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setTitle("Detail "+tvShow.getTitle());
+                getSupportActionBar().setTitle("Detail "+ tvShow.getTitle());
             }
         }
     }

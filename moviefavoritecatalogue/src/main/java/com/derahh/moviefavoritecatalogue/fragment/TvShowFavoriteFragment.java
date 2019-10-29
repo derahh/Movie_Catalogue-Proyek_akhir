@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,7 @@ import com.derahh.moviefavoritecatalogue.model.TvShow;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.derahh.moviefavoritecatalogue.database.DatabaseContract.TvShowColumns.CONTENT_URI;
 
@@ -39,10 +41,8 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
     private static final String TAG = TvShowFavoriteFragment.class.getSimpleName();
     private static final String EXTRA_STATE = "EXTRA_STATE";
 
-    RecyclerView recyclerView;
-    LinearLayoutManager linearLayoutManager;
-    ProgressBar progressBar;
-    TextView tvNoData;
+    private ProgressBar progressBar;
+    private TextView tvNoData;
 
     private TvShowFavoriteAdapter adapter;
 
@@ -55,13 +55,18 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_favorite,container, false);
+        return inflater.inflate(R.layout.list_favorite,container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         progressBar = view.findViewById(R.id.progress_bar);
         tvNoData = view.findViewById(R.id.tv_no_data);
-        recyclerView = view.findViewById(R.id.list_favorite);
+        RecyclerView recyclerView = view.findViewById(R.id.list_favorite);
 
-        linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
 
@@ -74,7 +79,7 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
         Handler handler = new Handler(handlerThread.getLooper());
 
         DataObserver myObserver = new DataObserver(handler, getContext());
-        getActivity().getContentResolver().registerContentObserver(CONTENT_URI, true, myObserver);
+        Objects.requireNonNull(getActivity()).getContentResolver().registerContentObserver(CONTENT_URI, true, myObserver);
 
         if (savedInstanceState == null) {
             new LoadMovieAsync(getContext(), this).execute();
@@ -84,8 +89,6 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
                 adapter.setListData(list);
             }
         }
-
-        return view;
     }
 
     @Override
@@ -145,7 +148,7 @@ public class TvShowFavoriteFragment extends Fragment implements LoadMovieCallbac
     public static class DataObserver extends ContentObserver {
         final Context context;
 
-        public DataObserver(Handler handler, Context context) {
+        DataObserver(Handler handler, Context context) {
             super(handler);
             this.context = context;
         }
