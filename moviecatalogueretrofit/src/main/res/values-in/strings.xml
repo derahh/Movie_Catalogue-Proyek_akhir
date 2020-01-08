@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Katalog Film Retrofit</string>
+    <string name="lorem">lorem ipsum dolor sit amet</string>
+    <string name="title_movie">Judul Favorite</string>
+    <string name="category_movie">Film</string>
+    <string name="no_data">Data Tidak Ada</string>
+    <string name="search">Cari</string>
+    <string name="change_language_settings">Change Language Setting</string>
+    <string name="year">Tahun</string>
+    <string name="user_score">Skor Pengguna</string>
+    <string name="overview">Ikhtisar</string>
+
+    <string-array name="data_title_tab">
+        <item>Film</item>
+        <item>Acara TV</item>
+    </string-array>
+</resources>
