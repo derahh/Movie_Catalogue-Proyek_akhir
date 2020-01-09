@@ -2,10 +2,12 @@ package com.derahh.moviecatalogueretrofit.viewModel;
 
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.derahh.moviecatalogueretrofit.model.Movie;
+import com.derahh.moviecatalogueretrofit.model.MovieResult;
+import com.derahh.moviecatalogueretrofit.model.Result;
 import com.derahh.moviecatalogueretrofit.service.APIService;
 
 import java.util.List;
@@ -21,7 +23,8 @@ public class MovieViewModel extends ViewModel {
 
     private static final String TAG = MovieViewModel.class.getSimpleName();
     private static final String API_KEY = "06b9cd349f041c2e51292a90868062fc";
-    private MutableLiveData<List<Movie>> listDataMovies = new MutableLiveData<>();
+    private MutableLiveData<MovieResult> dataMovies = new MutableLiveData<>();
+    private MutableLiveData<List<Result>> listDataMovies = new MutableLiveData<>();
 
     public void setMovie() {
         Log.d(TAG, "Running");
@@ -34,8 +37,8 @@ public class MovieViewModel extends ViewModel {
             language = "en-US";
         }
 
-        String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=" + API_KEY + "&language=" + language;
-        Log.e(TAG, "setMovie: " + url);
+        String url = "https://api.themoviedb.org/3/movie/";
+        Log.i(TAG, "setMovie: " + url);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
@@ -44,16 +47,21 @@ public class MovieViewModel extends ViewModel {
 
         APIService api = retrofit.create(APIService.class);
 
-        api.getAllMovie().enqueue(new Callback<List<Movie>>() {
+        api.getAllMovie(API_KEY, language).enqueue(new Callback<MovieResult>() {
             @Override
-            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
-                listDataMovies.postValue(response.body());
+            public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
+                Log.d("movieTitle", response.body().getResults().get(0).getTitle());
+                dataMovies.postValue(response.body());
             }
 
             @Override
-            public void onFailure(Call<List<Movie>> call, Throwable t) {
-
+            public void onFailure(Call<MovieResult> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage());
             }
         });
+    }
+
+    public LiveData<MovieResult> getMovie() {
+        return dataMovies;
     }
 }

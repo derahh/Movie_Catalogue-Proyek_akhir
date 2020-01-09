@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.derahh.moviecatalogueretrofit.R;
 import com.derahh.moviecatalogueretrofit.model.Movie;
+import com.derahh.moviecatalogueretrofit.model.Result;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
-    private List<Movie> listData = new ArrayList<>();
+    private List<Result> listData = new ArrayList<>();
     private Context mContext;
     private Movie movie;
 
@@ -27,11 +28,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         mContext = context;
     }
 
-    public List<Movie> getListData() {
+    public List<Result> getListData() {
         return listData;
     }
 
-    public void setListMovies(ArrayList<Movie> listData) {
+    public void setListMovies(List<Result> listData) {
         if (listData.size() > 0){
             this.listData.clear();
         }
