@@ -20,9 +20,10 @@ import com.derahh.moviecatalogueretrofit.viewModel.MovieViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private MovieViewModel viewModel;
     private ProgressBar progressBar;
     private TextView tvNoData;
+
+    private MovieViewModel viewModel;
     private MovieAdapter adapter;
 
 

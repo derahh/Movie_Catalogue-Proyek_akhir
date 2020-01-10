@@ -42,4 +42,6 @@ dependencies {
     //GSON
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.derahh.moviecatalogueretrofit.R;
 import com.derahh.moviecatalogueretrofit.model.Movie;
 import com.derahh.moviecatalogueretrofit.model.Result;
@@ -51,7 +52,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         viewHolder.tvTitle.setText(getListData().get(i).getTitle());
         viewHolder.tvDescription.setText(getListData().get(i).getOverview());
-        Glide.with(mContext).load(getListData().get(i).getPhoto()).into(viewHolder.imgPhoto);
+
+        RequestOptions options = new RequestOptions().error(R.drawable.ic_broken_image_black_24dp).placeholder(R.drawable.ic_broken_image_black_24dp);
+        Glide.with(mContext).load(getListData().get(i).getPhoto()).apply(options).into(viewHolder.imgPhoto);
     }
 
     @Override
