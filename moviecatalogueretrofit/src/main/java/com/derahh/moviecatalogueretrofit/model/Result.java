@@ -1,20 +1,23 @@
 
 package com.derahh.moviecatalogueretrofit.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
+@Entity(tableName = "movie_table")
 public class Result {
 
     @SerializedName("adult")
     private Boolean mAdult;
     @SerializedName("backdrop_path")
     private String mBackdropPath;
-    @SerializedName("genre_ids")
-    private List<Long> mGenreIds;
+
     @SerializedName("id")
+    @PrimaryKey
     private Long mId;
+
     @SerializedName("original_language")
     private String mOriginalLanguage;
     @SerializedName("original_title")
@@ -54,14 +57,6 @@ public class Result {
 
     public void setBackdropPath(String backdropPath) {
         mBackdropPath = backdropPath;
-    }
-
-    public List<Long> getGenreIds() {
-        return mGenreIds;
-    }
-
-    public void setGenreIds(List<Long> genreIds) {
-        mGenreIds = genreIds;
     }
 
     public Long getId() {
