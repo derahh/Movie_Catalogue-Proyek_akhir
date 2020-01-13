@@ -9,6 +9,7 @@
     <string name="year">Year</string>
     <string name="user_score">User Score</string>
     <string name="overview">Overview</string>
+    <string name="last_favorite">last favorite</string>
 
     <string-array name="data_title_tab">
         <item>Movies</item>
