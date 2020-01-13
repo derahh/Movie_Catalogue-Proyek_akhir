@@ -19,6 +19,16 @@
         android:layout_alignParentBottom="true"
         style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
 
+    <TextView
+        android:id="@+id/txt_last_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/last_favorite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_movie"
         android:layout_width="match_parent"
@@ -27,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar"
+        app:layout_constraintTop_toBottomOf="@id/txt_last_favorite"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
