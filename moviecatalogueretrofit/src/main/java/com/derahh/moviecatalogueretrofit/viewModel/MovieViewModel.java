@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.derahh.moviecatalogueretrofit.model.MovieResult;
 import com.derahh.moviecatalogueretrofit.service.APIClient;
-
-import java.util.Locale;
+import com.derahh.moviecatalogueretrofit.util.LanguageFormater;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,15 +24,7 @@ public class MovieViewModel extends ViewModel {
     public void setMovie() {
         Log.d(TAG, "Running");
 
-        String currentLanguage = Locale.getDefault().getISO3Language();
-        String language = "";
-        if (currentLanguage.equalsIgnoreCase("ind")) {
-            language = "id-ID";
-        } else if (currentLanguage.equalsIgnoreCase("eng")) {
-            language = "en-US";
-        }
-
-        api.getAPI().getAllMovie(API_KEY, language).enqueue(new Callback<MovieResult>() {
+        api.getAPI().getAllMovie(API_KEY, LanguageFormater.checkCurrentLanguage()).enqueue(new Callback<MovieResult>() {
             @Override
             public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
                 Log.d("movieTitle", response.body().getResults().get(0).getTitle());
