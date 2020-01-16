@@ -15,7 +15,7 @@ public abstract class MovieRoomDatabase extends RoomDatabase {
 
     private static volatile MovieRoomDatabase mInstance;
 
-    static MovieRoomDatabase getDatabase(final Context context) {
+    public static MovieRoomDatabase getDatabase(final Context context) {
         if (mInstance == null) {
             synchronized (MovieRoomDatabase.class) {
                 if (mInstance == null) {
