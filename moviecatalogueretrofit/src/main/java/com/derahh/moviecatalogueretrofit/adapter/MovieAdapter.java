@@ -26,7 +26,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     private List<Result> listData = new ArrayList<>();
     private Context mContext;
-    private boolean isFavorite = true;
     private FavoriteClickListener favoriteClickListener;
 
     public MovieAdapter(Context context, FavoriteClickListener favoriteClickListener) {
@@ -44,10 +43,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
         this.listData.addAll(listData);
         notifyDataSetChanged();
-    }
-
-    public boolean isFavorite() {
-        return isFavorite;
     }
 
     @NonNull
@@ -71,7 +66,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 if (favoriteClickListener != null) {
 //                    Toast.makeText(mContext, "Favorited " + getListData().get(i).getTitle(), Toast.LENGTH_SHORT).show();
                     favoriteClickListener.FavoriteClickListener(getListData().get(i));
-                    setIconFavorite(viewHolder);
                 }
             }
         });
@@ -93,16 +87,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tv_description);
             imgPhoto = itemView.findViewById(R.id.img_photo);
             imgFavorite = itemView.findViewById(R.id.img_favorite);
-        }
-    }
-
-    private void setIconFavorite(ViewHolder holder){
-        if(isFavorite()) {
-            Glide.with(mContext).load(R.drawable.ic_favorite_red_24dp).into(holder.imgFavorite);
-            isFavorite = true;
-        } else {
-            Glide.with(mContext).load(R.drawable.ic_favorite_border_24dp).into(holder.imgFavorite);
-            isFavorite = false;
         }
     }
 }

@@ -10,6 +10,7 @@
     <string name="user_score">User Score</string>
     <string name="overview">Overview</string>
     <string name="last_favorite">last favorite</string>
+    <string name="category_favorite">Favorite</string>
 
     <string-array name="data_title_tab">
         <item>Movies</item>
