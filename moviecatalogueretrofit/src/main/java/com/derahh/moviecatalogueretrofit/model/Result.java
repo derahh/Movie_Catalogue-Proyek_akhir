@@ -39,6 +39,16 @@ public class Result {
     @SerializedName("vote_count")
     private Double mVoteCount;
 
+    private boolean isFavorite;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
     public String getPhoto() {
         return "https://image.tmdb.org/t/p/w342/" + mPosterPath;
     }

@@ -1,6 +1,7 @@
 package com.derahh.moviecatalogueretrofit.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     private List<Result> listData = new ArrayList<>();
     private Context mContext;
     private FavoriteClickListener favoriteClickListener;
+    private boolean isFavorite = false;
 
     public MovieAdapter(Context context, FavoriteClickListener favoriteClickListener) {
         mContext = context;
@@ -45,6 +47,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -54,18 +60,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
-        viewHolder.tvTitle.setText(getListData().get(i).getTitle());
-        viewHolder.tvDescription.setText(getListData().get(i).getOverview());
+        final Result result = getListData().get(i);
+
+        viewHolder.tvTitle.setText(result.getTitle());
+        viewHolder.tvDescription.setText(result.getOverview());
 
         RequestOptions options = new RequestOptions().error(R.drawable.ic_broken_image_black_24dp).placeholder(R.drawable.ic_broken_image_black_24dp);
-        Glide.with(mContext).load(getListData().get(i).getPhoto()).apply(options).into(viewHolder.imgPhoto);
+        Glide.with(mContext).load(result.getPhoto()).apply(options).into(viewHolder.imgPhoto);
+
+        setIconFavorite(viewHolder, result);
+        Log.i("imgFavorite", String.valueOf(result.isFavorite()));
 
         viewHolder.imgFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (favoriteClickListener != null) {
-//                    Toast.makeText(mContext, "Favorited " + getListData().get(i).getTitle(), Toast.LENGTH_SHORT).show();
-                    favoriteClickListener.FavoriteClickListener(getListData().get(i));
+                    favoriteClickListener.FavoriteClickListener(result);
                 }
             }
         });
@@ -87,6 +97,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tv_description);
             imgPhoto = itemView.findViewById(R.id.img_photo);
             imgFavorite = itemView.findViewById(R.id.img_favorite);
+        }
+    }
+
+    private void setIconFavorite(ViewHolder holder, Result result) {
+        if (result.isFavorite()) {
+            Glide.with(mContext).load(R.drawable.ic_favorite_red_24dp).into(holder.imgFavorite);
+            result.setFavorite(false);
+        } else {
+            Glide.with(mContext).load(R.drawable.ic_favorite_border_24dp).into(holder.imgFavorite);
+            result.setFavorite(true);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.derahh.moviecatalogueretrofit.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Favo
     private MovieViewModel viewModel;
     private MovieAdapter adapter;
 
+    private List<Boolean> isFavorite;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +60,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Favo
         addItem();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
     private Observer<List<Result>> getLastFavoriteMovie = new Observer<List<Result>>() {
         @Override
         public void onChanged(List<Result> results) {
             if (results.size() != 0) {
-                tvLastFavorite.setText(results.get(0).getTitle());
+                tvLastFavorite.setText(results.get(results.size() - 1).getTitle());
             } else {
                 tvLastFavorite.setText("No Data Favorite");
             }
@@ -96,10 +104,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Favo
     @SuppressLint("ShowToast")
     @Override
     public void FavoriteClickListener(Result result) {
-        if (adapter.isFavorite()) {
+        Log.i("status", String.valueOf(adapter.isFavorite()));
+        if (result.isFavorite() == true) {
+            result.setFavorite(true);
             viewModel.InsertFavorite(result);
             Toast.makeText(this, "Favorited " + result.getTitle(), Toast.LENGTH_SHORT).show();
         } else {
+            result.setFavorite(false);
             viewModel.DeleteFavorite(result);
             Toast.makeText(this, "Unfavorited " + result.getTitle(), Toast.LENGTH_SHORT).show();
         }

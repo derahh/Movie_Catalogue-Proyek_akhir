@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
@@ -56,4 +58,6 @@ dependencies {
 
     // Testig
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
